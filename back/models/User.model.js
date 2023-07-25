@@ -1,23 +1,17 @@
-const mangoose = require("mangoose");
-const userRoles = {
-    ADMIN: 'admin',
-    CHEF: 'chef',
-    AGENT: 'agent',
-    FINANCIER: 'financier',
-  };
+const mongoose = require("mongoose");
 
-const User = mangoose.model(
+const User = mongoose.model(
     "User",
-    new mangoose.Schema({
-      userName:String,
-      email: String,
-      password: String,
-      resetPasswordToken:String,
-      resetPasswordExpires:String,
-     
-      role:userRoles,
-  
+    new mongoose.Schema({
+        userName: String,
+        email: String,
+        password: String,
+        resetPasswordToken: String,
+        resetPasswordExpires: String,
+        role: String,
+        token: String
+
     })
-  );
-  
-  module.exports = User;
+);
+
+module.exports = User;
