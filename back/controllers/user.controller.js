@@ -32,12 +32,12 @@ class userController{
         if (password){
             try{
                 const userToUpdate = User.findById(id);
-                if (!user){
+                if (!userToUpdate){
                     return res.status(403).json({error:"User not found"})
                 }
 
-                user.password = bcrypt.hashSync(password);
-                const newUser = User.findByIdAndUpdate(id,this.updateUser,{new:true});
+                userToUpdate.password = bcrypt.hashSync(password);
+                const newUser = User.findByIdAndUpdate(id,userToUpdate,{new:true});
                 if (newUser){
                     return res.status(200).json({message:"user updated successfully"})
                 }else{
