@@ -1,11 +1,12 @@
 import React from 'react'
 import { Routes, Route, } from "react-router-dom";
-import AuthViews from '../../views/Auth-Views/Login';
-import Loading from '../../components/shared-components/Loading';
+import AuthViews from 'views/Auth-Views/Login';
 import { useThemeSwitcher } from "react-css-theme-switcher";
+import Loading from "../../Components/shared-components/Loading";
 
-export const AuthLayout = () => {
+export const AuthLayout = ({ children }) => {
     const { status } = useThemeSwitcher();
+    console.log("auth  layout");
 
     if (status === 'loading') {
         return <Loading cover="page" />;
@@ -13,9 +14,8 @@ export const AuthLayout = () => {
 
     return (
         <div className="auth-container">
-            <Routes>
-                <Route path="" component={AuthViews} />
-            </Routes>
+
+                { children }
         </div>
     )
 }

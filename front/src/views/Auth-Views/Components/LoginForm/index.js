@@ -3,28 +3,23 @@ import { connect } from "react-redux";
 import { Button, Form, Input, Divider, Alert } from "antd";
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
-import CustomIcon from '~/Util-Components/CustomIcon'
 import {
     signIn,
     showLoading,
     showAuthMessage,
     hideAuthMessage
-} from '~/Redux/actions/Auth';
+} from 'Redux/actions/Auth';
 import { useNavigate  } from "react-router-dom";
-import { motion } from "framer-motion"
-import {GoogleSVG} from "../../../../assets/svg/icon";
+import { motion } from "framer-motion";
 
 export const LoginForm = props => {
     let history = useNavigate ();
 
     const {
-        otherSignIn,
         showForgetPassword,
         hideAuthMessage,
         onForgetPasswordClick,
         showLoading,
-        signInWithGoogle,
-        signInWithFacebook,
         extra,
         signIn,
         token,
@@ -44,17 +39,6 @@ export const LoginForm = props => {
         showLoading()
         signIn(values);
     };
-
-    const onGoogleLogin = () => {
-        showLoading()
-        signInWithGoogle()
-    }
-
-    const onFacebookLogin = () => {
-        showLoading()
-        signInWithFacebook()
-    }
-
     useEffect(() => {
         if (token !== null && allowRedirect) {
             history.push(redirect)

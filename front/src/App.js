@@ -4,6 +4,8 @@ import store from './Redux/store';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Views from './views';
 import { Route, Routes } from 'react-router-dom';
+import {ThemeSwitcherProvider} from "react-css-theme-switcher";
+import Login from "./views/Auth-Views/Login";
 
 const THEME_CONFIG = {
     navCollapsed: false,
@@ -15,24 +17,27 @@ const THEME_CONFIG = {
     mobileNav: false,
     currentTheme: 'light',
     direction: 'ltr'
-};
-const themes = {
-  dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
-  light: `${process.env.PUBLIC_URL}/css/light-theme.css`,
+};const themes = {
+    dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
+    light: `${process.env.PUBLIC_URL}/css/light-theme.css`,
 };
 
 function App() {
-  return (
-      <div className="App">
-        <Provider store={store}>
-            <Router>
-              <Routes>
-                <Route path="/" component={Views}/>
-              </Routes>
-            </Router>
-        </Provider>
-      </div>
-  );
+    return (
+        <div className="App">
+            <Provider store={store}>
+                <ThemeSwitcherProvider themeMap={themes} defaultTheme={THEME_CONFIG.currentTheme} insertionPoint="styles-insertion-point">
+                    <Router>
+                        <Routes>
+
+                            <Route path="/" component={<Views/>}/>
+                            <Route path={"/login"} element={<Login/>} />
+                        </Routes>
+                    </Router>
+                </ThemeSwitcherProvider>
+            </Provider>
+        </div>
+    );
 }
 
 export default App;

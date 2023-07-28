@@ -1,27 +1,24 @@
 import React from "react";
-import {Route, Routes, Link, Navigate} from "react-router-dom";
-import { connect } from "react-redux";
-import AppLayout from "../layouts/AppLayout";
-import AuthLayout from '../layouts/AuthLayout';
-import AppLocale from "../lang";
-import { IntlProvider } from "react-intl";
-import { ConfigProvider } from 'antd';
+import {Route, Routes, Navigate, BrowserRouter} from "react-router-dom";
+import AppLayout from "layouts/AppLayout";
+import AuthLayout from 'layouts/AuthLayout';
+import AppLocale from "lang";
+import {IntlProvider} from "react-intl";
+import {ConfigProvider} from 'antd';
+import {APP_PREFIX_PATH, AUTH_PREFIX_PATH} from 'configs/AppConfig'
 
-const APP_PREFIX_PATH = '/app';
-const AUTH_PREFIX_PATH = '/auth';
-
-function RouteInterceptor({ children, isAuthenticated, ...rest }) {
+function RouteInterceptor({children, isAuthenticated, ...rest}) {
     return (
         <Route
             {...rest}
-            render={({ location }) =>
+            render={({location}) =>
                 isAuthenticated ? (
                     children
                 ) : (
-                    <Link
+                    <Navigate
                         to={{
                             pathname: AUTH_PREFIX_PATH,
-                            state: { from: location }
+                            state: {from: location}
                         }}
                     />
                 )
@@ -31,26 +28,32 @@ function RouteInterceptor({ children, isAuthenticated, ...rest }) {
 }
 
 export const Views = (props) => {
-    const { locale, token, location, direction } = props;
+    const {locale, token, location, direction} = props;
     const currentAppLocale = AppLocale[locale];
     return (
-        <IntlProvider
-            locale={currentAppLocale.locale}
-            messages={currentAppLocale.messages}>
-            <ConfigProvider locale={currentAppLocale.antd} direction={direction}>
-                <Routes>
-                    <Route exact path="/">
-                        <Navigate to={APP_PREFIX_PATH} />
+        <IntlProvider locale={locale}>
+            <ConfigProvider locale={locale.antd} direction={direction}>
+                <BrowserRouter>
+                    <Routes>
+
+                        <Route path="/" exact>
+                            <Navigate to={APP_PREFIX_PATH}/>
+                        </Route>
+
+                        <AuthLayout>
+                            <Route path={"/login"}></Route>
+                        </AuthLayout>
+
+
+                    <Route path={APP_PREFIX_PATH} isAuthenticated={token}>
+                        <AppLayout direction={direction}/>
                     </Route>
-                    <Route path={AUTH_PREFIX_PATH}>
-                        <AuthLayout direction={direction} />
-                    </Route>
-                    <RouteInterceptor path={APP_PREFIX_PATH} isAuthenticated={token}>
-                        <AppLayout direction={direction} location={location}/>
-                    </RouteInterceptor>
                 </Routes>
-            </ConfigProvider>
-        </IntlProvider>
-    )
+            </BrowserRouter>
+        </ConfigProvider>
+</IntlProvider>
+)
 }
+
+
 export default Views;
