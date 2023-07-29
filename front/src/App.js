@@ -5,7 +5,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Views from './views';
 import { Route, Routes } from 'react-router-dom';
 import {ThemeSwitcherProvider} from "react-css-theme-switcher";
-import Login from "./views/Auth-Views/Login";
 
 const THEME_CONFIG = {
     navCollapsed: false,
@@ -29,9 +28,7 @@ function App() {
                 <ThemeSwitcherProvider themeMap={themes} defaultTheme={THEME_CONFIG.currentTheme} insertionPoint="styles-insertion-point">
                     <Router>
                         <Routes>
-
-                            <Route path="/" component={<Views/>}/>
-                            <Route path={"/login"} element={<Login/>} />
+                            <Route path="/*" element={<Views/>}/>
                         </Routes>
                     </Router>
                 </ThemeSwitcherProvider>

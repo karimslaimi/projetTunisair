@@ -1,7 +1,6 @@
 import React from 'react'
 import {Card, Row, Col} from "antd";
 import {LoginForm} from "../Components/LoginForm";
-import AuthLayout from "../../../layouts/AuthLayout";
 
 
 const backgroundStyle = {
@@ -11,9 +10,9 @@ const backgroundStyle = {
 }
 
 const Login = props => {
-    console.log("in login");
+
     return (
-        <AuthLayout>
+
             <div className="h-100" style={backgroundStyle}>
                 <div className="container d-flex flex-column justify-content-center h-100">
                     <Row justify="center">
@@ -35,7 +34,7 @@ const Login = props => {
                     </Row>
                 </div>
             </div>
-        </AuthLayout>)
+        )
 }
 
 export default Login

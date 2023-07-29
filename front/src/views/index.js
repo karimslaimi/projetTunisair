@@ -1,59 +1,27 @@
 import React from "react";
-import {Route, Routes, Navigate, BrowserRouter} from "react-router-dom";
+import {Route, Routes, Navigate, Outlet} from "react-router-dom";
 import AppLayout from "layouts/AppLayout";
 import AuthLayout from 'layouts/AuthLayout';
-import AppLocale from "lang";
-import {IntlProvider} from "react-intl";
-import {ConfigProvider} from 'antd';
-import {APP_PREFIX_PATH, AUTH_PREFIX_PATH} from 'configs/AppConfig'
+import Login from "./Auth-Views/Login";
 
-function RouteInterceptor({children, isAuthenticated, ...rest}) {
+const PrivateRoutes = () => {
+    let auth = {'token': false}
     return (
-        <Route
-            {...rest}
-            render={({location}) =>
-                isAuthenticated ? (
-                    children
-                ) : (
-                    <Navigate
-                        to={{
-                            pathname: AUTH_PREFIX_PATH,
-                            state: {from: location}
-                        }}
-                    />
-                )
-            }
-        />
-    );
+        auth.token ? <Outlet/> : <Navigate to="/login"/>
+    )
 }
-
 export const Views = (props) => {
-    const {locale, token, location, direction} = props;
-    const currentAppLocale = AppLocale[locale];
     return (
-        <IntlProvider locale={locale}>
-            <ConfigProvider locale={locale.antd} direction={direction}>
-                <BrowserRouter>
-                    <Routes>
 
-                        <Route path="/" exact>
-                            <Navigate to={APP_PREFIX_PATH}/>
-                        </Route>
-
-                        <AuthLayout>
-                            <Route path={"/login"}></Route>
-                        </AuthLayout>
-
-
-                    <Route path={APP_PREFIX_PATH} isAuthenticated={token}>
-                        <AppLayout direction={direction}/>
-                    </Route>
-                </Routes>
-            </BrowserRouter>
-        </ConfigProvider>
-</IntlProvider>
-)
+        <Routes>
+            <Route element={<PrivateRoutes/>}>
+                <Route path={"*"} element={<AppLayout/>}/>
+            </Route>
+            <Route path="/login" element={
+                <AuthLayout>
+                    <Login/>
+                </AuthLayout>}/>
+        </Routes>
+    )
 }
-
-
 export default Views;

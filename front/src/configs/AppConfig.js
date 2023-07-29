@@ -14,3 +14,5 @@ export const THEME_CONFIG = {
 	currentTheme: 'light',
 	direction: DIR_LTR
 };
+
+export const BASE_URL = "127.0.0.1:3000";
