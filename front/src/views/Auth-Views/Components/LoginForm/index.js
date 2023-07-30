@@ -136,10 +136,6 @@ LoginForm.defaultProps = {
     showForgetPassword: false
 };
 
-const mapStateToProps = ({auth}) => {
-    const {loading, message, showMessage, token, redirect} = auth;
-    return {loading, message, showMessage, token, redirect}
-}
 
 
 
