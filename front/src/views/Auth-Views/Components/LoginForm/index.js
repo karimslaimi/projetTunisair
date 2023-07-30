@@ -1,59 +1,62 @@
-import React, { useEffect } from 'react';
-import { connect } from "react-redux";
-import { Button, Form, Input, Divider, Alert } from "antd";
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { useState} from 'react';
+import { useDispatch} from "react-redux";
+import {Button, Form, Input, Alert} from "antd";
+import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import PropTypes from 'prop-types';
-import {
-    signIn,
-    showLoading,
-    showAuthMessage,
-    hideAuthMessage
-} from 'Redux/actions/Auth';
+
 import { useNavigate  } from "react-router-dom";
 import { motion } from "framer-motion";
+import Loading from "Components/shared-components/Loading";
+import {useForm} from "antd/es/form/Form";
+import authService from "Services/AuthService";
+import {login} from "Redux/Slices/AuthSlice";
 
-export const LoginForm = props => {
-    let history = useNavigate ();
+const LoginForm = props => {
+
 
     const {
         showForgetPassword,
-        hideAuthMessage,
         onForgetPasswordClick,
-        showLoading,
         extra,
-        signIn,
-        token,
-        loading,
-        redirect,
         showMessage,
-        message,
-        allowRedirect
+        message
     } = props
 
-    const initialCredential = {
-        email: 'user1@themenate.net',
-        password: '2005ipo'
-    }
 
-    const onLogin = values => {
-        showLoading()
-        signIn(values);
-    };
-    useEffect(() => {
-        if (token !== null && allowRedirect) {
-            history.push(redirect)
-        }
-        if(showMessage) {
-            setTimeout(() => {
-                hideAuthMessage();
-            }, 3000);
-        }
-    });
+    let [form] = useForm();
+    let hidden = true;
+    let [isLoading, setLoading]=useState(false);
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
+
+
+    const onLogin = (data) => {
+        setLoading(true);
+        authService.signIn(data.userName,data.password).then((result)=>{
+            if (result){
+                dispatch(login(result));
+                setLoading(false);
+                navigate('/');
+            }else{
+                setLoading(false);
+                alert(result.data.message);
+
+            }
+        }).catch((e)=>{
+            setLoading(false);
+            console.log(e.response.data.message);
+            alert(e.response.data.message);
+        });
+
+    }
 
 
 
     return (
         <>
+            <Loading hidden={hidden}/>
             <motion.div
                 initial={{ opacity: 0, marginBottom: 0 }}
                 animate={{
@@ -63,25 +66,21 @@ export const LoginForm = props => {
                 <Alert type="error" showIcon message={message}></Alert>
             </motion.div>
             <Form
+                form={form}
                 layout="vertical"
                 name="login-form"
-                initialValues={initialCredential}
                 onFinish={onLogin}
             >
                 <Form.Item
-                    name="email"
-                    label="Email"
+                    name="userName"
+                    label="Username"
                     rules={[
                         {
                             required: true,
-                            message: 'Please input your email',
-                        },
-                        {
-                            type: 'email',
-                            message: 'Please enter a validate email!'
+                            message: 'Please input your username',
                         }
                     ]}>
-                    <Input prefix={<MailOutlined className="text-primary" />}/>
+                    <Input prefix={<UserOutlined className="text-primary" />} placeholder="Username"/>
                 </Form.Item>
                 <Form.Item
                     name="password"
@@ -106,12 +105,15 @@ export const LoginForm = props => {
                         }
                     ]}
                 >
-                    <Input.Password prefix={<LockOutlined className="text-primary" />}/>
+                    <Input.Password prefix={<LockOutlined className="text-primary" />} autoComplete="on" placeholder="Password"/>
                 </Form.Item>
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" block loading={loading}>
+                    { isLoading ? <div className="loading"><span>Loading...</span></div> :
+
+                    <Button type="primary" htmlType="submit" block  loading={isLoading}>
                         Sign In
                     </Button>
+                        }
                 </Form.Item>
 
                 { extra }
@@ -139,11 +141,6 @@ const mapStateToProps = ({auth}) => {
     return {loading, message, showMessage, token, redirect}
 }
 
-const mapDispatchToProps = {
-    signIn,
-    showAuthMessage,
-    showLoading,
-    hideAuthMessage
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+
+export default LoginForm

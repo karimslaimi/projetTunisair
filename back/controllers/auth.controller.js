@@ -7,9 +7,10 @@ var jwt = require("jsonwebtoken");
 
 class authController {
     static async signin(req, res) {
-        console.log(req.body.username);
+        console.log(req.body.userName);
         try {
-            const user = await User.findOne({ userName: req.body.username });
+            const user = await User.findOne({ userName: req.body.userName });
+            console.log(user);
             if (!user) {
                 return res.status(403).send({ message: 'User not found' });
             }
@@ -27,7 +28,7 @@ class authController {
 
             res.status(200).send({
                 id: user._id,
-                username: user.username,
+                userName: user.userName,
                 email: user.email,
                 roles: authorities,
                 token: token,

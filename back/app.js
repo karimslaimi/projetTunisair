@@ -1,14 +1,9 @@
 const express = require('express');
 const app = express();
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
 const UserRoutes = require("./routes/UserRoutes");
 const mongoose = require("mongoose");
 const AuthRoutes = require("./routes/AuthRoutes");
-const http = require('http');
-const server = http.createServer(app);
-const path = require('path');
-
+const cors = require('cors'); 
 
 mongoose
     .connect(process.env.MONGO_URL || `mongodb://127.0.0.1:27017/tunisair`)
@@ -21,7 +16,7 @@ mongoose
     app.use(express.json());
 
 
-
+    app.use(cors());
 
 // Define your routes here...
 app.use('/users',UserRoutes);
