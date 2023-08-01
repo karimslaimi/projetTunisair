@@ -4,7 +4,7 @@ import colorSchemeReducer from "./colorSchemeSlice";
 import sideMenuReducer from "./sideMenuSlice";
 import simpleMenuReducer from "./simpleMenuSlice";
 import topMenuReducer from "./topMenuSlice";
-
+import userReducer from "./authSlice";
 export const store = configureStore({
   reducer: {
     darkMode: darkModeReducer,
@@ -12,6 +12,7 @@ export const store = configureStore({
     sideMenu: sideMenuReducer,
     simpleMenu: simpleMenuReducer,
     topMenu: topMenuReducer,
+    userData: userReducer,
   },
 });
 
