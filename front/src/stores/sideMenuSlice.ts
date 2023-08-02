@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "./store";
-import { icons } from "../base-components/Lucide";
+import {createSlice} from "@reduxjs/toolkit";
+import {RootState} from "./store";
+import {icons} from "../base-components/Lucide";
 
 export interface Menu {
   icon: keyof typeof icons;
@@ -24,9 +24,9 @@ const initialState: SideMenuState = {
       title: "Dashboard",
     },
     {
-      icon: "Activity",
-      pathname: "/page-2",
-      title: "Page 2",
+        icon: "Users",
+        pathname: "/users",
+        title: "Users",
     },
   ],
 };

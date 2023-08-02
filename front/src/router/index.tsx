@@ -1,18 +1,14 @@
 import {Navigate, useRoutes} from "react-router-dom";
 import SideMenu from "../layouts/SideMenu";
 import Page1 from "../pages/Page1";
-import Page2 from "../pages/Page2";
 import {useSelector} from "react-redux";
 import Login from "../pages/Login";
+import Users from "../pages/Users";
 
-interface RouterProps {
-  isLoggedIn: boolean;
-}
-function isUserAuthenticated(){
-  return useSelector((state: any) => state.isAuthenticated) ;
-}
+
 function Router() {
-  const isLoggedIn = isUserAuthenticated();
+  const isLoggedIn = useSelector((state: any) => state.userData.isAuthenticated);
+
   const routes = [
     {
 
@@ -28,8 +24,8 @@ function Router() {
           element: <Page1/>,
         },
         {
-          path: "page-2",
-          element: <Page2/>,
+          path: "users",
+          element: <Users/>,
         },
       ]
     },

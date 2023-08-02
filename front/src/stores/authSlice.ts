@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 export interface authenticationState {
     isAuthenticated: boolean,
@@ -23,7 +23,7 @@ export const userSlice = createSlice({
             state.isAuthenticated = true;
             state.user = action.payload;
             state.token = action.payload.token;
-            state.role = action.payload.role;
+            state.role = action.payload.roles;
         },
         logOut:(state, action)=>{
             state.isAuthenticated = false;
