@@ -13,7 +13,7 @@ const signIn = async (userName: string, password: string) => {
         });
         if (response.status === 200) {
             localStorage.setItem("token", response.data.token);
-            localStorage.setItem("token", response.data.user);
+            localStorage.setItem("user", response.data.user);
             return response.data;
 
         } else {

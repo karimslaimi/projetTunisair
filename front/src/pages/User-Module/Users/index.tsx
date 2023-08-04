@@ -1,13 +1,14 @@
-import Lucide from "../../base-components/Lucide";
-import {Menu} from "../../base-components/Headless";
-import Button from "../../base-components/Button";
-import {FormInput, FormSelect} from "../../base-components/Form";
+import Lucide from "../../../base-components/Lucide";
+import {Menu} from "../../../base-components/Headless";
+import Button from "../../../base-components/Button";
+import {FormInput, FormSelect} from "../../../base-components/Form";
 import * as xlsx from "xlsx";
 import {createRef, useEffect, useRef, useState} from "react";
 import {createIcons, icons} from "lucide";
 import {TabulatorFull as Tabulator} from "tabulator-tables";
-import {stringToHTML} from "../../utils/helper";
-import userService from "../../Services/UserService";
+import {stringToHTML} from "../../../utils/helper";
+import userService from "../../../Services/UserService";
+import {useNavigate} from "react-router-dom";
 
 interface Response {
     name?: string;
@@ -17,8 +18,14 @@ interface Response {
 }
 
 function Main() {
+    let navigate = useNavigate();
     let users: any[] = [];
-    userService.userList().then((x) => users = x);
+    userService.userList().then((x) => {
+        users = x;
+        initTabulator();
+        reInitOnResizeWindow();
+
+    });
 
     const tableRef = createRef<HTMLDivElement>();
     const tabulator = useRef<Tabulator>();
@@ -27,18 +34,11 @@ function Main() {
         type: "like",
         value: "",
     });
-    const imageAssets = import.meta.glob<{
-        default: string;
-    }>("/src/assets/images/fakers/*.{jpg,jpeg,png,svg}", {eager: true});
+
     const initTabulator = () => {
         if (tableRef.current) {
             tabulator.current = new Tabulator(tableRef.current, {
                 data: users,
-                paginationMode: "remote",
-                filterMode: "remote",
-                sortMode: "remote",
-                printAsHtml: true,
-                printStyled: true,
                 pagination: true,
                 paginationSize: 10,
                 paginationSizeSelector: [10, 20, 30, 40],
@@ -58,20 +58,13 @@ function Main() {
 
                     // For HTML table
                     {
-                        title: "userName",
+                        title: "Username",
                         minWidth: 200,
                         responsive: 0,
                         field: "userName",
                         vertAlign: "middle",
                         print: false,
                         download: false,
-                        formatter(cell) {
-                            const response: Response = cell.getData();
-                            return `<div>
-                <div class="font-medium whitespace-nowrap">${response.name}</div>
-                <div class="text-slate-500 text-xs whitespace-nowrap">${response.category}</div>
-              </div>`;
-                        },
                     },
                     {
                         title: "Email",
@@ -92,16 +85,6 @@ function Main() {
                         vertAlign: "middle",
                         print: false,
                         download: false,
-                        formatter(cell) {
-                            const response: Response = cell.getData();
-                            return `<div class="flex items-center lg:justify-center ${
-                                response.status ? "text-success" : "text-danger"
-                            }">
-                <i data-lucide="check-square" class="w-4 h-4 mr-2"></i> ${
-                                response.status ? "Active" : "Inactive"
-                            }
-              </div>`;
-                        },
                     },
                     {
                         title: "ACTIONS",
@@ -127,69 +110,6 @@ function Main() {
                                 // On click actions
                             });
                             return a;
-                        },
-                    },
-
-                    // For print format
-                    {
-                        title: "PRODUCT NAME",
-                        field: "name",
-                        visible: false,
-                        print: true,
-                        download: true,
-                    },
-                    {
-                        title: "CATEGORY",
-                        field: "category",
-                        visible: false,
-                        print: true,
-                        download: true,
-                    },
-                    {
-                        title: "REMAINING STOCK",
-                        field: "remaining_stock",
-                        visible: false,
-                        print: true,
-                        download: true,
-                    },
-                    {
-                        title: "STATUS",
-                        field: "status",
-                        visible: false,
-                        print: true,
-                        download: true,
-                        formatterPrint(cell) {
-                            return cell.getValue() ? "Active" : "Inactive";
-                        },
-                    },
-                    {
-                        title: "IMAGE 1",
-                        field: "images",
-                        visible: false,
-                        print: true,
-                        download: true,
-                        formatterPrint(cell) {
-                            return cell.getValue()[0];
-                        },
-                    },
-                    {
-                        title: "IMAGE 2",
-                        field: "images",
-                        visible: false,
-                        print: true,
-                        download: true,
-                        formatterPrint(cell) {
-                            return cell.getValue()[1];
-                        },
-                    },
-                    {
-                        title: "IMAGE 3",
-                        field: "images",
-                        visible: false,
-                        print: true,
-                        download: true,
-                        formatterPrint(cell) {
-                            return cell.getValue()[2];
                         },
                     },
                 ],
@@ -234,78 +154,25 @@ function Main() {
     const onResetFilter = () => {
         setFilter({
             ...filter,
-            field: "name",
+            field: "userName",
             type: "like",
             value: "",
         });
         onFilter();
     };
 
-    // Export
-    const onExportCsv = () => {
-        if (tabulator.current) {
-            tabulator.current.download("csv", "data.csv");
-        }
-    };
-
-    const onExportJson = () => {
-        if (tabulator.current) {
-            tabulator.current.download("json", "data.json");
-        }
-    };
-
-    const onExportXlsx = () => {
-        if (tabulator.current) {
-            (window as any).XLSX = xlsx;
-            tabulator.current.download("xlsx", "data.xlsx", {
-                sheetName: "Products",
-            });
-        }
-    };
-
-    const onExportHtml = () => {
-        if (tabulator.current) {
-            tabulator.current.download("html", "data.html", {
-                style: true,
-            });
-        }
-    };
-
-    // Print
-    const onPrint = () => {
-        if (tabulator.current) {
-            tabulator.current.print();
-        }
-    };
-
-    useEffect(() => {
-        initTabulator();
-        reInitOnResizeWindow();
-    }, []);
-
+const handleAddClick=()=>{
+    navigate("add");
+}
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
-                <h2 className="mr-auto text-lg font-medium">Tabulator</h2>
+                <h2 className="mr-auto text-lg font-medium">Users</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
-                    <Button variant="primary" className="mr-2 shadow-md">
-                        Add New Product
+                    <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
+                        Add New User
                     </Button>
-                    <Menu className="ml-auto sm:ml-0">
-                        <Menu.Button as={Button} className="px-2 font-normal !box">
-              <span className="flex items-center justify-center w-5 h-5">
-                <Lucide icon="Plus" className="w-4 h-4"/>
-              </span>
-                        </Menu.Button>
-                        <Menu.Items className="w-40">
-                            <Menu.Item>
-                                <Lucide icon="FilePlus" className="w-4 h-4 mr-2"/> New Category
-                            </Menu.Item>
-                            <Menu.Item>
-                                <Lucide icon="UserPlus" className="w-4 h-4 mr-2"/> New Group
-                            </Menu.Item>
-                        </Menu.Items>
-                    </Menu>
+
                 </div>
             </div>
             {/* BEGIN: HTML Table Data */}
@@ -334,9 +201,9 @@ function Main() {
                                 }}
                                 className="w-full mt-2 2xl:w-full sm:mt-0 sm:w-auto"
                             >
-                                <option value="name">Name</option>
-                                <option value="category">Category</option>
-                                <option value="remaining_stock">Remaining Stock</option>
+                                <option value="userName">Name</option>
+                                <option value="email">Email</option>
+                                <option value="role">Role</option>
                             </FormSelect>
                         </div>
                         <div className="items-center mt-2 sm:flex sm:mr-4 xl:mt-0">
@@ -402,46 +269,7 @@ function Main() {
                             </Button>
                         </div>
                     </form>
-                    <div className="flex mt-5 sm:mt-0">
-                        <Button
-                            id="tabulator-print"
-                            variant="outline-secondary"
-                            className="w-1/2 mr-2 sm:w-auto"
-                            onClick={onPrint}
-                        >
-                            <Lucide icon="Printer" className="w-4 h-4 mr-2"/> Print
-                        </Button>
-                        <Menu className="w-1/2 sm:w-auto">
-                            <Menu.Button
-                                as={Button}
-                                variant="outline-secondary"
-                                className="w-full sm:w-auto"
-                            >
-                                <Lucide icon="FileText" className="w-4 h-4 mr-2"/> Export
-                                <Lucide
-                                    icon="ChevronDown"
-                                    className="w-4 h-4 ml-auto sm:ml-2"
-                                />
-                            </Menu.Button>
-                            <Menu.Items className="w-40">
-                                <Menu.Item onClick={onExportCsv}>
-                                    <Lucide icon="FileText" className="w-4 h-4 mr-2"/> Export CSV
-                                </Menu.Item>
-                                <Menu.Item onClick={onExportJson}>
-                                    <Lucide icon="FileText" className="w-4 h-4 mr-2"/> Export
-                                    JSON
-                                </Menu.Item>
-                                <Menu.Item onClick={onExportXlsx}>
-                                    <Lucide icon="FileText" className="w-4 h-4 mr-2"/> Export
-                                    XLSX
-                                </Menu.Item>
-                                <Menu.Item onClick={onExportHtml}>
-                                    <Lucide icon="FileText" className="w-4 h-4 mr-2"/> Export
-                                    HTML
-                                </Menu.Item>
-                            </Menu.Items>
-                        </Menu>
-                    </div>
+
                 </div>
                 <div className="overflow-x-auto scrollbar-hidden">
                     <div id="tabulator" ref={tableRef} className="mt-5"></div>

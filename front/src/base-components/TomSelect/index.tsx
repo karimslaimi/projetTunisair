@@ -1,4 +1,4 @@
-import { createRef, useEffect } from "react";
+import React, { createRef, useEffect } from "react";
 import { setValue, init, updateValue } from "./tom-select";
 import { TomSettings, RecursivePartial } from "tom-select/src/types/index";
 import TomSelectPlugin from "tom-select";

@@ -3,12 +3,12 @@ import SideMenu from "../layouts/SideMenu";
 import Page1 from "../pages/Page1";
 import {useSelector} from "react-redux";
 import Login from "../pages/Login";
-import Users from "../pages/Users";
+import Users from "../pages/User-Module/Users";
+import AddUser from "../pages/User-Module/AddUser";
 
 
 function Router() {
-  const isLoggedIn = useSelector((state: any) => state.userData.isAuthenticated);
-
+  const isLoggedIn = useSelector((state: any) => state.userData.isAuthenticated || localStorage.getItem("token"));
   const routes = [
     {
 
@@ -24,9 +24,13 @@ function Router() {
           element: <Page1/>,
         },
         {
-          path: "users",
+          path: "/users",
           element: <Users/>,
         },
+        {
+          path:"/users/add",
+          element:<AddUser/>,
+        }
       ]
     },
 

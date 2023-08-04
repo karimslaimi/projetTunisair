@@ -1,11 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-export interface authenticationState {
-    isAuthenticated: boolean,
-    user: any,
-    token:string,
-    role:string,
-}
+
 
 const initialState = {
     isAuthenticated: false,
@@ -20,12 +15,15 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action) => {
-            state.isAuthenticated = true;
+
+            const { token, roles } = action.payload;
+            state.isAuthenticated = !!token; // Check if token exists
             state.user = action.payload;
-            state.token = action.payload.token;
-            state.role = action.payload.roles;
+            state.token = token;
+            state.role = roles;
         },
         logOut:(state, action)=>{
+            console.log("in logout");
             state.isAuthenticated = false;
             state.user = null;
             state.token = '';

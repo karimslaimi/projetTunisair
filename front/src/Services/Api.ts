@@ -11,8 +11,6 @@ const api: AxiosInstance = axios.create({
 api.interceptors.request.use(
     (config) => {
         const token = store.getState().userData.token;
-        console.log(token);
-        //const token = localStorage.getItem('token'); // Retrieve the JWT token from localStorage or your preferred storage method
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }

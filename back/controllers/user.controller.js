@@ -51,8 +51,8 @@ class userController{
     }
 
     static async getAllUser(req,res){
-        console.log("in get all method");
         const users =await User.find();
+        console.log(users);
         return res.json(users);
     }
 
