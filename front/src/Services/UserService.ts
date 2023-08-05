@@ -18,20 +18,29 @@ const addUser = async (data:any)=>{
     let response;
     try{
         response = await api.post('/users/addUser',data).then((resp)=>{
-            response = resp;
+            return resp;
         }).catch((error:any)=>{
             console.log(error);
-            alert(error);
-            return error;
+            throw error;
         });
-    }catch (error){
+    } catch (error) {
         console.log(error);
+        throw error;
     }
     return response;
 
 }
 
+const deleteUser = async (id: string) => {
+    return await api.delete('/users/delete/' + id).then((res) => {
+        return res;
+    }).catch((error) => {
+        throw error;
+    });
+}
+
 export default {
     userList,
     addUser,
+    deleteUser
 }

@@ -8,7 +8,7 @@ import AddUser from "../pages/User-Module/AddUser";
 
 
 function Router() {
-  const isLoggedIn = useSelector((state: any) => state.userData.isAuthenticated || localStorage.getItem("token"));
+  const isLoggedIn = useSelector((state: any) => state.userData.isAuthenticated);
   const routes = [
     {
 

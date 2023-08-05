@@ -1,9 +1,6 @@
-import Lucide from "../../../base-components/Lucide";
-import {Menu} from "../../../base-components/Headless";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
-import * as xlsx from "xlsx";
-import {createRef, useEffect, useRef, useState} from "react";
+import {createRef, useRef, useState} from "react";
 import {createIcons, icons} from "lucide";
 import {TabulatorFull as Tabulator} from "tabulator-tables";
 import {stringToHTML} from "../../../utils/helper";
@@ -20,13 +17,31 @@ interface Response {
 function Main() {
     let navigate = useNavigate();
     let users: any[] = [];
-    userService.userList().then((x) => {
-        users = x;
-        initTabulator();
-        reInitOnResizeWindow();
 
-    });
 
+    const refreshTab = async () => {
+        userService.userList().then((x) => {
+            users = x;
+            initTabulator();
+            reInitOnResizeWindow();
+
+        });
+    }
+
+    let a = refreshTab();
+    const handleDelete = (id: string) => {
+        let res = userService.deleteUser(id).then(async (res) => {
+            if (res) {
+                await refreshTab();
+                alert("user deleted");
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+            alert("error occured");
+        })
+
+    }
     const tableRef = createRef<HTMLDivElement>();
     const tabulator = useRef<Tabulator>();
     const [filter, setFilter] = useState({
@@ -96,17 +111,34 @@ function Main() {
                         vertAlign: "middle",
                         print: false,
                         download: false,
-                        formatter() {
+                        formatter(cell) {
                             const a =
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
-                  <a class="flex items-center mr-3" href="javascript:;">
-                    <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
-                  </a>
-                  <a class="flex items-center text-danger" href="javascript:;">
-                    <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
-                  </a>
-                </div>`);
-                            a.addEventListener("click", function () {
+                                                      <a class="flex items-center mr-3" href="javascript:;">
+                                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
+                                                      </a>
+                                                      <a class="flex items-center text-danger" href="javascript:;">
+                                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
+                                                      </a>
+                                </div>`);
+
+                            a.addEventListener("click", function (e) {
+
+                                const clickedElement = e.target;
+                                if (!clickedElement) return;
+
+                                // Check if the clicked element is the 'Edit' link
+                                // @ts-ignore
+                                if (clickedElement.matches('.flex.items-center.mr-3')) {
+                                    console.log("Edit link clicked");
+                                }
+
+                                // Check if the clicked element is the 'Delete' link
+                                // @ts-ignore
+                                if (clickedElement.matches('.flex.items-center.text-danger')) {
+                                    // @ts-ignore
+                                    handleDelete(cell.getData()._id);
+                                }
                                 // On click actions
                             });
                             return a;
@@ -161,9 +193,11 @@ function Main() {
         onFilter();
     };
 
-const handleAddClick=()=>{
-    navigate("add");
-}
+    const handleAddClick = () => {
+        navigate("add");
+    }
+
+
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
