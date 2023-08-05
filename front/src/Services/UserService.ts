@@ -14,7 +14,24 @@ const userList = async () => {
     }
 }
 
+const addUser = async (data:any)=>{
+    let response;
+    try{
+        response = await api.post('/users/addUser',data).then((resp)=>{
+            response = resp;
+        }).catch((error:any)=>{
+            console.log(error);
+            alert(error);
+            return error;
+        });
+    }catch (error){
+        console.log(error);
+    }
+    return response;
+
+}
 
 export default {
     userList,
+    addUser,
 }

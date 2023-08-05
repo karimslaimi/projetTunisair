@@ -5,12 +5,24 @@ import {
 import TomSelect from "../../../base-components/TomSelect";
 import {useState} from "react";
 import Button from "../../../base-components/Button";
+import userService from "../../../Services/UserService";
 
 
 
 function main() {
 
     const formSubmit =()=>{
+        let data = {
+            username:username,
+            email:email,
+            password:password,
+            role:role,
+        };
+        userService.addUser(data).then((result)=>{
+            if(result){
+                alert("user added successfully")
+            }
+        })
 
     }
 
