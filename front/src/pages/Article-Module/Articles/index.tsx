@@ -1,33 +1,36 @@
-import Button from "../../../base-components/Button";
-import {FormInput, FormSelect} from "../../../base-components/Form";
+import {useNavigate} from "react-router-dom";
+import articleService from "../../../Services/ArticleService";
 import {createRef, useRef, useState} from "react";
-import {createIcons, icons} from "lucide";
 import {TabulatorFull as Tabulator} from "tabulator-tables";
 import {stringToHTML} from "../../../utils/helper";
-import userService from "../../../Services/UserService";
-import {useNavigate} from "react-router-dom";
+import {createIcons, icons} from "lucide";
+import Button from "../../../base-components/Button";
+import {FormInput, FormSelect} from "../../../base-components/Form";
 
 
 function Main() {
     let navigate = useNavigate();
-    let users: any[] = [];
+    let articles: any[] = [];
 
 
     const refreshTab = async () => {
-        userService.userList().then((x) => {
-            users = x;
+        articleService.articleList().then((x: any) => {
+            articles = x;
             initTabulator();
             reInitOnResizeWindow();
 
+        }).catch((error: any) => {
+            console.log(error);
+            alert("error occured");
         });
     }
 
-    let a = refreshTab();
+    let a = refreshTab().then((res) => res);
     const handleDelete = (id: string) => {
-        let res = userService.deleteUser(id).then(async (res) => {
+        let res = articleService.deleteArticle(id).then(async (res) => {
             if (res) {
                 await refreshTab();
-                alert("user deleted");
+                alert("article deleted");
             }
             return res;
         }).catch((e) => {
@@ -40,14 +43,14 @@ function Main() {
     const handleEdit = (id: string) => {
         console.log(id);
         if (id) {
-            navigate("/users/edit/" + id);
+            navigate("/articles/edit/" + id);
         }
     }
 
     const tableRef = createRef<HTMLDivElement>();
     const tabulator = useRef<Tabulator>();
     const [filter, setFilter] = useState({
-        field: "userName",
+        field: "title",
         type: "like",
         value: "",
     });
@@ -55,7 +58,7 @@ function Main() {
     const initTabulator = () => {
         if (tableRef.current) {
             tabulator.current = new Tabulator(tableRef.current, {
-                data: users,
+                data: articles,
                 pagination: true,
                 paginationSize: 10,
                 paginationSizeSelector: [10, 20, 30, 40],
@@ -75,30 +78,10 @@ function Main() {
 
                     // For HTML table
                     {
-                        title: "Username",
+                        title: "Titre",
                         minWidth: 200,
                         responsive: 0,
-                        field: "userName",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                    },
-                    {
-                        title: "Email",
-                        minWidth: 200,
-                        field: "email",
-                        hozAlign: "center",
-                        headerHozAlign: "center",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                    },
-                    {
-                        title: "Role",
-                        minWidth: 200,
-                        field: "role",
-                        hozAlign: "center",
-                        headerHozAlign: "center",
+                        field: "title",
                         vertAlign: "middle",
                         print: false,
                         download: false,
@@ -189,7 +172,7 @@ function Main() {
     const onResetFilter = () => {
         setFilter({
             ...filter,
-            field: "userName",
+            field: "title",
             type: "like",
             value: "",
         });
@@ -204,10 +187,10 @@ function Main() {
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
-                <h2 className="mr-auto text-lg font-medium">Users</h2>
+                <h2 className="mr-auto text-lg font-medium">Articles</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
                     <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
-                        Add New User
+                        Add New Article
                     </Button>
 
                 </div>
@@ -238,9 +221,7 @@ function Main() {
                                 }}
                                 className="w-full mt-2 2xl:w-full sm:mt-0 sm:w-auto"
                             >
-                                <option value="userName">Name</option>
-                                <option value="email">Email</option>
-                                <option value="role">Role</option>
+                                <option value="title">Title</option>
                             </FormSelect>
                         </div>
                         <div className="items-center mt-2 sm:flex sm:mr-4 xl:mt-0">

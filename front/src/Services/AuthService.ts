@@ -1,7 +1,7 @@
 import axios from "axios";
 import {BASE_URL, config} from "../utils/config";
-import {useDispatch} from "react-redux";
 import {logOut} from "../stores/authSlice";
+import {store} from "../stores/store";
 
 
 const signIn = async (userName: string, password: string) => {
@@ -32,11 +32,11 @@ const signIn = async (userName: string, password: string) => {
 const signOut = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    const dispatch = useDispatch();
-    dispatch(logOut({}));
+    store.dispatch(logOut);
+    window.location.href = '/';
 }
 
 export default {
     signIn,
-    logOut
+    signOut
 }

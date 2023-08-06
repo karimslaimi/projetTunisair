@@ -3,38 +3,43 @@ import {RootState} from "./store";
 import {icons} from "../base-components/Lucide";
 
 export interface Menu {
-  icon: keyof typeof icons;
-  title: string;
-  pathname?: string;
-  subMenu?: Menu[];
-  ignore?: boolean;
+    icon: keyof typeof icons;
+    title: string;
+    pathname?: string;
+    subMenu?: Menu[];
+    ignore?: boolean;
 }
 
 export interface SideMenuState {
-  role: string;
-  menu: Array<Menu | "divider">;
+    role: string;
+    menu: Array<Menu | "divider">;
 }
 
 const initialState: SideMenuState = {
-  role: "admin",
-  menu: [
-    {
-      icon: "Activity",
-      pathname: "/admin",
-      title: "Dashboard",
-    },
-    {
-        icon: "Users",
-        pathname: "/users",
-        title: "Users",
-    },
-  ],
+    role: "admin",
+    menu: [
+        {
+            icon: "Activity",
+            pathname: "/admin",
+            title: "Dashboard",
+        },
+        {
+            icon: "Users",
+            pathname: "/users",
+            title: "Users",
+        },
+        {
+            icon: "Menu",
+            pathname: "/articles",
+            title: "Articles",
+        }
+    ],
 };
 
 export const sideMenuSlice = createSlice({
-  name: "sideMenu",
-  initialState,
-  reducers: {},
+    name: "sideMenu",
+    initialState,
+    reducers: {},
 });
 
 export const selectSideMenu = (state: RootState) => state.sideMenu.menu;

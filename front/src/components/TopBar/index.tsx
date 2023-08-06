@@ -6,6 +6,7 @@ import {Menu} from "../../base-components/Headless";
 import fakerData from "../../utils/faker";
 import clsx from "clsx";
 import {useSelector} from "react-redux";
+import authService from "../../Services/AuthService";
 
 function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
 
@@ -86,9 +87,9 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
 
                 <Menu.Divider className="bg-white/[0.08]" />
 
-                <Menu.Item className="hover:bg-white/5">
-                <Lucide icon="ToggleRight" className="w-4 h-4 mr-2" /> Logout
-              </Menu.Item>
+                <Menu.Item className="hover:bg-white/5" onClick={() => authService.signOut()}>
+                    <Lucide icon="ToggleRight" className="w-4 h-4 mr-2"/> Logout
+                </Menu.Item>
             </Menu.Items>
           </Menu>
           {/* END: Account Menu */}

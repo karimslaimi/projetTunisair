@@ -3,6 +3,7 @@ const app = express();
 const UserRoutes = require("./routes/UserRoutes");
 const mongoose = require("mongoose");
 const AuthRoutes = require("./routes/AuthRoutes");
+const ArticleRoutes = require("./routes/ArticleRoutes");
 const cors = require('cors'); 
 
 mongoose
@@ -21,6 +22,7 @@ mongoose
 // Define your routes here...
 app.use('/users',UserRoutes);
 app.use('/auth',AuthRoutes);
+app.use('/article',ArticleRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;

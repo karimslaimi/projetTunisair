@@ -4,7 +4,6 @@ const User = require("../models/User.model");
  function checkRole(role) {
     return async function (req, res, next) {
       const user= await User.findById(req.user.id);//Assuming the user role is available in req.user after authentication
-        console.log(user);
       
 
       if (!user){

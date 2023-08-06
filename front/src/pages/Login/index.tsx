@@ -4,12 +4,11 @@ import {FormCheck, FormInput} from "../../base-components/Form";
 import Button from "../../base-components/Button";
 import LoadingIcon from "../../base-components/LoadingIcon";
 import clsx from "clsx";
-import {useState} from "react";
+import React, {useState} from "react";
 import authService from "../../Services/AuthService";
 import {login} from "../../stores/authSlice";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {DomEvent} from "leaflet";
 
 
 function Main() {
@@ -20,7 +19,8 @@ function Main() {
     const [isLoading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const onLogin = (data: any) => {
+    const onLogin = (event: React.ChangeEvent<HTMLFormElement>) => {
+        event.preventDefault();
         setLoading(true);
         authService.signIn(username, password).then((result: any) => {
 
@@ -87,55 +87,58 @@ function Main() {
                                     A few more clicks to sign in to your account. Manage all your dashboard in one
                                     place
                                 </div>
-                                <div className="mt-8 intro-x">
-                                    <FormInput
-                                        type="text"
-                                        className="block px-4 py-3 intro-x min-w-full xl:min-w-[350px]"
-                                        placeholder="Username"
-                                        value={username}
-                                        onChange={e => setUsername(e.target.value)}
-                                    />
-                                    <FormInput
-                                        type="password"
-                                        className="block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]"
-                                        placeholder="Password"
-                                        value={password}
-                                        onChange={e => setPassword(e.target.value)}
-                                        autoComplete="on"
-                                    />
-                                </div>
-                                <div
-                                    className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
-                                    <div className="flex items-center mr-auto">
-                                        <FormCheck.Input
-                                            id="remember-me"
-                                            type="checkbox"
-                                            className="mr-2 border"
+                                <form onSubmit={onLogin}>
+
+
+                                    <div className="mt-8 intro-x">
+                                        <FormInput
+                                            type="text"
+                                            className="block px-4 py-3 intro-x min-w-full xl:min-w-[350px]"
+                                            placeholder="Username"
+                                            value={username}
+                                            onChange={e => setUsername(e.target.value)}
                                         />
-                                        <label
-                                            className="cursor-pointer select-none"
-                                            htmlFor="remember-me"
-                                        >
-                                            Remember me
-                                        </label>
+                                        <FormInput
+                                            type="password"
+                                            className="block px-4 py-3 mt-4 intro-x min-w-full xl:min-w-[350px]"
+                                            placeholder="Password"
+                                            value={password}
+                                            onChange={e => setPassword(e.target.value)}
+                                            autoComplete="on"
+                                        />
                                     </div>
-                                    <a href="">Forgot Password?</a>
-                                </div>
-                                <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
-                                    <Button
-                                        disabled={isLoading}
-                                        variant="primary"
-                                        className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
-                                        onClick={onLogin}
-                                    >
-                                        Login
+                                    <div
+                                        className="flex mt-4 text-xs intro-x text-slate-600 dark:text-slate-500 sm:text-sm">
+                                        <div className="flex items-center mr-auto">
+                                            <FormCheck.Input
+                                                id="remember-me"
+                                                type="checkbox"
+                                                className="mr-2 border"
+                                            />
+                                            <label
+                                                className="cursor-pointer select-none"
+                                                htmlFor="remember-me"
+                                            >
+                                                Remember me
+                                            </label>
+                                        </div>
+                                        <a href="">Forgot Password?</a>
+                                    </div>
+                                    <div className="mt-5 text-center intro-x xl:mt-8 xl:text-left">
+                                        <Button
+                                            disabled={isLoading}
+                                            variant="primary"
+                                            className="w-full px-4 py-3 align-top xl:w-32 xl:mr-3"
+                                            type={"submit"}
+                                        >
+                                            Login
 
-                                        <LoadingIcon hidden={!isLoading} icon="oval" color="white"
-                                                     className="w-4 h-4 ml-2"/>
-                                    </Button>
+                                            <LoadingIcon hidden={!isLoading} icon="oval" color="white"
+                                                         className="w-4 h-4 ml-2"/>
+                                        </Button>
 
-                                </div>
-
+                                    </div>
+                                </form>
                             </div>
                         </div>
 

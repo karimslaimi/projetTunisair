@@ -9,17 +9,17 @@ const userList = async () => {
         });
         return response;
     } catch (error: any) {
-        console.log(error);
+        //  console.log(error);
         alert(error.response.data.message);
     }
 }
 
-const addUser = async (data:any)=>{
+const addUser = async (data: any) => {
     let response;
-    try{
-        response = await api.post('/users/addUser',data).then((resp)=>{
+    try {
+        response = await api.post('/users/addUser', data).then((resp) => {
             return resp;
-        }).catch((error:any)=>{
+        }).catch((error: any) => {
             console.log(error);
             throw error;
         });
@@ -39,8 +39,21 @@ const deleteUser = async (id: string) => {
     });
 }
 
+const updateUser = async (id: string, data: any) => {
+    if (!id) return;
+    let response;
+    try {
+        response = await api.put("users/update/" + id, data);
+    } catch (error: any) {
+        console.log(error.response.data.message);
+        throw error;
+    }
+    return response;
+}
+
 export default {
     userList,
     addUser,
-    deleteUser
+    deleteUser,
+    updateUser
 }
