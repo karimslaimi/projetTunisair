@@ -9,6 +9,8 @@ import Dashboard from "../pages/Dashboard";
 import Articles from "../pages/Article-Module/Articles";
 import AddArticle from "../pages/Article-Module/AddArticle";
 import EditArticle from "../pages/Article-Module/EditArticle";
+import Vols from "../pages/Vol-Module/Vols";
+import EditVol from "../pages/Vol-Module/EditVol";
 
 
 function Router() {
@@ -41,6 +43,7 @@ function Router() {
           element: <EditUser/>
         },
         //endregion
+        //region Article
         {
           path: "/articles",
           element: <Articles/>
@@ -52,7 +55,22 @@ function Router() {
         {
           path: "/articles/edit/:id",
           element: <EditArticle/>
-        }
+        },
+        //endregion
+        //region Vols
+        {
+          path: "/vols",
+          element: <Vols/>
+        },
+        {
+          path: "/vols/add",
+          element: <AddVol/>
+        },
+        {
+          path: "/vols/edit/:id",
+          element: <EditVol/>
+        },
+        //endregion
 
       ]
     },

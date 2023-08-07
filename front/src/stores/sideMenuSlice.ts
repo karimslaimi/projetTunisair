@@ -32,6 +32,11 @@ const initialState: SideMenuState = {
             icon: "Menu",
             pathname: "/articles",
             title: "Articles",
+        },
+        {
+            icon: "Plane",
+            pathname: "/vols",
+            title: "Vols",
         }
     ],
 };
