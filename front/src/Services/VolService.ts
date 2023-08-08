@@ -37,7 +37,7 @@ const deletevol = async (id: string) => {
 }
 
 const updatevol = async (id: string, data: any) => {
-    if (!id) return;
+    if (!id) throw new Error("Id not specified");
     let response;
     try {
         response = await api.put("vol/update/" + id, data);

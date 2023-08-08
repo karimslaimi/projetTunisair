@@ -30,7 +30,7 @@ api.interceptors.response.use(
         if (error.response.status === 401 && error.response.data.message === 'Invalid token') {
             authService.signOut();
         }
-        return error
+        throw error;
     }
 )
 

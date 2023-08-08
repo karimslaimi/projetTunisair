@@ -11,6 +11,7 @@ import AddArticle from "../pages/Article-Module/AddArticle";
 import EditArticle from "../pages/Article-Module/EditArticle";
 import Vols from "../pages/Vol-Module/Vols";
 import EditVol from "../pages/Vol-Module/EditVol";
+import AddVol from "../pages/Vol-Module/AddVol";
 
 
 function Router() {

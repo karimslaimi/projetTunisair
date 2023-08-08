@@ -6,7 +6,7 @@ import {stringToHTML} from "../../../utils/helper";
 import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
-
+import {DateTime} from 'luxon';
 
 function Main() {
     let navigate = useNavigate();
@@ -30,7 +30,7 @@ function Main() {
         let res = volService.deletevol(id).then(async (res) => {
             if (res) {
                 await refreshTab();
-                alert("article deleted");
+                alert("vol deleted");
             }
             return res;
         }).catch((e) => {
@@ -91,8 +91,13 @@ function Main() {
                         responsive: 0,
                         field: "date_vol",
                         vertAlign: "middle",
-                        print: false,
-                        download: false,
+                        formatter: cell => {
+                            const dateValue = cell.getValue();
+                            if (dateValue) {
+                                return DateTime.fromISO(dateValue).toFormat('dd/MM/yyyy');
+                            }
+                            return '';
+                        }
                     }, {
                         title: "Origine",
                         minWidth: 200,

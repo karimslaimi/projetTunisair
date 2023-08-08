@@ -5,7 +5,7 @@ import volService from "../../../Services/VolService";
 import Notification from "../../../base-components/Notification";
 import Lucide from "../../../base-components/Lucide";
 import * as yup from "yup";
-import {useForm} from "react-hook-form";
+import {FieldValues, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import Toastify from "toastify-js";
@@ -24,6 +24,7 @@ function main() {
         volService.getById(id ?? '').then((res) => {
             if (res) {
                 reset(res.data);
+                setDate(getValues('date_vol'));
             }
         })
 
@@ -72,15 +73,7 @@ function main() {
                 stopOnFocus: true,
             }).showToast();
         } else {
-            let data = {
-                num_vol: '',
-                date_vol: '',
-                origine: '',
-                destination: '',
-                nombre_passager: '',
-                h_depart: '',
-                h_arrive: '',
-            };
+            let data : FieldValues=getValues();
             volService.updatevol(id ?? '', data).then((result: any) => {
                 if (result) {
                     alert("vol updated successfully");
@@ -107,7 +100,7 @@ function main() {
     return (
         <>
             <div className="flex items-center mt-8 intro-y">
-                <h2 className="mr-auto text-lg font-medium">Update vol</h2>
+                <h2 className="mr-auto text-lg font-medium">Add vol</h2>
             </div>
             <div className="grid grid-cols-12 gap-2 mt-5">
                 <div className="col-span-12 intro-y lg:col-span-6">
@@ -117,7 +110,7 @@ function main() {
                         <form className="validate-form" onSubmit={formSubmit}>
                             <div className="mt-3 input-form">
                                 <FormLabel htmlFor="num_vol"
-                                           className="flex flex-col w-full sm:flex-row">Title
+                                           className="flex flex-col w-full sm:flex-row">Flight number
                                 </FormLabel>
                                 <FormInput
                                     {...register("num_vol")}
@@ -138,7 +131,7 @@ function main() {
                                 <FormLabel htmlFor="date_vol"
                                            className="flex flex-col w-full sm:flex-row">Flight Date
                                 </FormLabel>
-                                <Litepicker value={getValues('date_vol')} onChange={setDate}
+                                <Litepicker value={date} onChange={handleDateChange}
 
                                             options={{
                                                 autoApply: false,
@@ -150,7 +143,7 @@ function main() {
                                                     years: true,
                                                 },
                                             }}
-                                            className={"block w-56 mx-auto" + clsx({"border-danger": errors.title})}/>
+                                            className={"w-full" + clsx({"border-danger": errors.title})}/>
 
                                 {errors.date_vol && (
                                     <div className="mt-2 text-danger">
@@ -197,66 +190,60 @@ function main() {
                             </div>
 
                             <div className="mt-3 input-form">
-                                <FormLabel htmlFor="title"
-                                           className="flex flex-col w-full sm:flex-row">Title
+                                <FormLabel htmlFor="nombre_passager"
+                                           className="flex flex-col w-full sm:flex-row">Number of passangers
                                 </FormLabel>
                                 <FormInput
-                                    {...register("title")}
-                                    id="title"
+                                    {...register("nombre_passager")}
+                                    id="nombre_passager"
                                     type="text"
-                                    placeholder="Enter the article name"
-                                    onChange={e => setTitle(e.target.value)}
-                                    value={title}
-                                    className={"w-full " + clsx({"border-danger": errors.title})}
+                                    placeholder="Enter the number of passanger"
+                                    className={"w-full " + clsx({"border-danger": errors.nombre_passager})}
                                 />
-                                {errors.title && (
+                                {errors.nombre_passager && (
                                     <div className="mt-2 text-danger">
-                                        {typeof errors.title.message === "string" &&
-                                            errors.title.message}
+                                        {typeof errors.nombre_passager.message === "string" &&
+                                            errors.nombre_passager.message}
                                     </div>
                                 )}
                             </div>
 
 
                             <div className="mt-3 input-form">
-                                <FormLabel htmlFor="title"
-                                           className="flex flex-col w-full sm:flex-row">Title
+                                <FormLabel htmlFor="h_depart"
+                                           className="flex flex-col w-full sm:flex-row">Heure Départ
                                 </FormLabel>
                                 <FormInput
-                                    {...register("title")}
-                                    id="title"
-                                    type="text"
-                                    placeholder="Enter the article name"
-                                    onChange={e => setTitle(e.target.value)}
-                                    value={title}
-                                    className={"w-full " + clsx({"border-danger": errors.title})}
+                                    {...register("h_depart")}
+                                    id="h_depart"
+                                    type={"time"}
+                                    placeholder="Enter the departure time"
+                                    className={"w-full " + clsx({"border-danger": errors.h_depart})}
                                 />
-                                {errors.title && (
+                                {errors.h_depart && (
                                     <div className="mt-2 text-danger">
-                                        {typeof errors.title.message === "string" &&
-                                            errors.title.message}
+                                        {typeof errors.h_depart.message === "string" &&
+                                            errors.h_depart.message}
                                     </div>
                                 )}
                             </div>
 
 
                             <div className="mt-3 input-form">
-                                <FormLabel htmlFor="title"
+                                <FormLabel htmlFor="h_arrive"
                                            className="flex flex-col w-full sm:flex-row">Title
                                 </FormLabel>
                                 <FormInput
-                                    {...register("title")}
-                                    id="title"
-                                    type="text"
-                                    placeholder="Enter the article name"
-                                    onChange={e => setTitle(e.target.value)}
-                                    value={title}
-                                    className={"w-full " + clsx({"border-danger": errors.title})}
+                                    {...register("h_arrive")}
+                                    id="h_arrive"
+                                    type="time"
+                                    placeholder="Enter the arrival time"
+                                    className={"w-full " + clsx({"border-danger": errors.h_arrive})}
                                 />
-                                {errors.title && (
+                                {errors.h_arrive && (
                                     <div className="mt-2 text-danger">
-                                        {typeof errors.title.message === "string" &&
-                                            errors.title.message}
+                                        {typeof errors.h_arrive.message === "string" &&
+                                            errors.h_arrive.message}
                                     </div>
                                 )}
                             </div>
