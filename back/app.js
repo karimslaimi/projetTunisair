@@ -4,6 +4,7 @@ const UserRoutes = require("./routes/UserRoutes");
 const mongoose = require("mongoose");
 const AuthRoutes = require("./routes/AuthRoutes");
 const ArticleRoutes = require("./routes/ArticleRoutes");
+const VolRoutes = require("./routes/VolRoutes");
 const cors = require('cors'); 
 
 mongoose
@@ -23,6 +24,7 @@ mongoose
 app.use('/users',UserRoutes);
 app.use('/auth',AuthRoutes);
 app.use('/article',ArticleRoutes);
+app.use('/vol',VolRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
