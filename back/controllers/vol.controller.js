@@ -8,6 +8,7 @@ async function createVol(req, res) {
         const savedVol = await newVol.save();
         res.status(201).json(savedVol);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Error creating vol' });
     }
 }

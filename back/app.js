@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const AuthRoutes = require("./routes/AuthRoutes");
 const ArticleRoutes = require("./routes/ArticleRoutes");
 const VolRoutes = require("./routes/VolRoutes");
+const RetardRoutes = require("./routes/RetardRoutes");
 const cors = require('cors'); 
 
 mongoose
@@ -25,6 +26,7 @@ app.use('/users',UserRoutes);
 app.use('/auth',AuthRoutes);
 app.use('/article',ArticleRoutes);
 app.use('/vol',VolRoutes);
+app.use('/retard', RetardRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;

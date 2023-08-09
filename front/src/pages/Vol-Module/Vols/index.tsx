@@ -7,15 +7,18 @@ import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
 import {DateTime} from 'luxon';
+import RetardModal from "../RetardModal";
 
 function Main() {
     let navigate = useNavigate();
-    let articles: any[] = [];
+    let vols: any[] = [];
 
-
+    let [isOpen, setIsOpen] = useState(false);
+    let [isClosed, setIsClosed] = useState(true);
+    let [voldId, setVolId] = useState('');
     const refreshTab = async () => {
         volService.volList().then((x: any) => {
-            articles = x;
+            vols = x;
             initTabulator();
             reInitOnResizeWindow();
 
@@ -58,7 +61,7 @@ function Main() {
     const initTabulator = () => {
         if (tableRef.current) {
             tabulator.current = new Tabulator(tableRef.current, {
-                data: articles,
+                data: vols,
                 pagination: true,
                 paginationSize: 10,
                 paginationSizeSelector: [10, 20, 30, 40],
@@ -135,6 +138,9 @@ function Main() {
                         formatter(cell) {
                             const a =
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
+                                                      <a class="flex items-center text-pending mr-3" href="javascript:;">
+                                                        <i data-lucide="alarm-minus" class="w-4 h-4 mr-1"></i> Delay
+                                                      </a>
                                                       <a class="flex items-center mr-3" href="javascript:;">
                                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
                                                       </a>
@@ -147,20 +153,32 @@ function Main() {
 
                                 const clickedElement = e.target;
                                 if (!clickedElement) return;
+                                // @ts-ignore
+                                if (clickedElement.matches('.text-pending')){
+                                    // @ts-ignore
+                                    setVolId(cell.getData()._id);
+                                    setIsClosed(false);
+                                    setIsOpen(true);
+                                    return;
 
-                                // Check if the clicked element is the 'Edit' link
+                                }
+
                                 // @ts-ignore
                                 if (clickedElement.matches('.flex.items-center.mr-3')) {
                                     // @ts-ignore
                                     handleEdit(cell.getData()._id);
+                                    return;
                                 }
 
-                                // Check if the clicked element is the 'Delete' link
+
                                 // @ts-ignore
                                 if (clickedElement.matches('.flex.items-center.text-danger')) {
                                     // @ts-ignore
                                     handleDelete(cell.getData()._id);
+                                    return;
                                 }
+
+
                                 // On click actions
                             });
                             return a;
@@ -223,10 +241,10 @@ function Main() {
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
-                <h2 className="mr-auto text-lg font-medium">Articles</h2>
+                <h2 className="mr-auto text-lg font-medium">Flights</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
                     <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
-                        Add New Article
+                        Add New Flight
                     </Button>
 
                 </div>
@@ -333,6 +351,11 @@ function Main() {
                 </div>
             </div>
             {/* END: HTML Table Data */}
+
+            <RetardModal isOpen={isOpen} voldId={voldId}  onClose={()=> {
+                setIsOpen(false);
+                setIsClosed(true);
+            }} />
         </>
     );
 }
