@@ -37,6 +37,11 @@ const initialState: SideMenuState = {
             icon: "Plane",
             pathname: "/vols",
             title: "Vols",
+        },
+        {
+            icon: "AlarmMinus",
+            pathname: "/retards",
+            title: "Delays",
         }
     ],
 };

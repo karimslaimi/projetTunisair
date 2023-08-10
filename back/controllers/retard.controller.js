@@ -1,9 +1,13 @@
 const Retard = require("../models/Retard.model"); // Make sure to provide the correct path to your Retard model
-
+const Vol = require("../models/Vol.model");
 // Create a new Retard
 async function createRetard(req, res) {
     try {
+        console.log(req.body);
         const newRetard = await Retard.create(req.body);
+        var vol = await Vol.findOneAndUpdate({ _id: req.body.Vol }, {$push: {retards: newRetard._id}}, { new: true });
+        await Retard.findOneAndUpdate({_id: newRetard._id},{vol:vol},{new:true});
+        console.log(newRetard);
         res.status(201).json(newRetard);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -13,7 +17,8 @@ async function createRetard(req, res) {
 // Get all Retards
 async function getAllRetards(req, res) {
     try {
-        const retards = await Retard.find();
+        const retards = await Retard.find().populate("vol");
+        console.log(retards);
         res.status(200).json(retards);
     } catch (error) {
         res.status(500).json({ error: error.message });

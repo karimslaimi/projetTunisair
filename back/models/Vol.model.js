@@ -10,6 +10,10 @@ const Vol = mongoose.model(
         nombre_passager: { type: Number, required: true },
         h_depart: { type: String, required: true },
         h_arrive: { type: String, required: true },
+        retards: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Retard'
+          }]
     })
 );
 

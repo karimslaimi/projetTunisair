@@ -12,6 +12,7 @@ import EditArticle from "../pages/Article-Module/EditArticle";
 import Vols from "../pages/Vol-Module/Vols";
 import EditVol from "../pages/Vol-Module/EditVol";
 import AddVol from "../pages/Vol-Module/AddVol";
+import Retard from "../pages/Vol-Module/Retard";
 
 
 function Router() {
@@ -72,7 +73,18 @@ function Router() {
           element: <EditVol/>
         },
         //endregion
-
+        //region retard
+        {
+          path: "/retards",
+          element: <Retard/>
+        },
+        //endregion
+        //region contrat
+        {
+          path: "/contrats",
+          element: <Retard/>
+        },
+        //endregion
       ]
     },
 
