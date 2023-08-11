@@ -6,7 +6,11 @@ const contratSchema = new mongoose.Schema({
     prix_menu: { type: Number, required: true },
     date_debut: { type: Date, required: true },
     date_fin: { type: Date, required: true },
-    created_at: { type: Date, default: Date.now }
+    created_at: { type: Date, default: Date.now },
+    articles: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ArticleContrat',
+      }],
 });
 
 const Contrat = mongoose.model('Contrat', contratSchema);

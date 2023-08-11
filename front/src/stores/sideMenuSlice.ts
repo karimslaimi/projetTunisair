@@ -34,6 +34,11 @@ const initialState: SideMenuState = {
             title: "Articles",
         },
         {
+            icon: "FileText",
+            pathname: "/contract",
+            title: "Contracts",
+        },
+        {
             icon: "Plane",
             pathname: "/vols",
             title: "Vols",

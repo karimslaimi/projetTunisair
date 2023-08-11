@@ -13,6 +13,8 @@ import Vols from "../pages/Vol-Module/Vols";
 import EditVol from "../pages/Vol-Module/EditVol";
 import AddVol from "../pages/Vol-Module/AddVol";
 import Retard from "../pages/Vol-Module/Retard";
+import Contrats from "../pages/Contrat-Module/Contrats";
+import AddContrat from "../pages/Contrat-Module/AddContrat";
 
 
 function Router() {
@@ -81,8 +83,12 @@ function Router() {
         //endregion
         //region contrat
         {
-          path: "/contrats",
-          element: <Retard/>
+          path: "/contract",
+          element: <Contrats/>
+        },
+        {
+          path: "/contract/add",
+          element: <AddContrat/>
         },
         //endregion
       ]

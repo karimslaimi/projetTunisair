@@ -21,6 +21,7 @@ function Main() {
     const navigate = useNavigate();
     const onLogin = (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
+        console.log("hhhhh");
         setLoading(true);
         authService.signIn(username, password).then((result: any) => {
 

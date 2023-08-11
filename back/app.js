@@ -6,6 +6,7 @@ const AuthRoutes = require("./routes/AuthRoutes");
 const ArticleRoutes = require("./routes/ArticleRoutes");
 const VolRoutes = require("./routes/VolRoutes");
 const RetardRoutes = require("./routes/RetardRoutes");
+const ContratRoutes = require("./routes/ContratsRoutes");
 const cors = require('cors'); 
 
 mongoose
@@ -27,7 +28,8 @@ app.use('/auth',AuthRoutes);
 app.use('/article',ArticleRoutes);
 app.use('/vol',VolRoutes);
 app.use('/retard', RetardRoutes);
+app.use('/contrat',ContratRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.listen(PORT,'0.0.0.0', () => console.log(`Server is running on port ${PORT}`));

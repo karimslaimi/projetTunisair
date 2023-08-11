@@ -13,3 +13,22 @@ async function createContrat(req,res){
         res.status(400).json({error:error.message});
     }
 }
+
+
+async function getAllContrat(req,res){
+    try{
+        const contrats = await Contrat.find().populate("articles");
+        console.log(contrats);
+        res.status(200).json(contrats);
+
+    }catch(error){
+        console.log(error);
+        res.status(400).json({error:error.message});
+    }
+}
+
+
+module.exports = {
+    createContrat,
+    getAllContrat,
+}
