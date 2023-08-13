@@ -1,5 +1,7 @@
 const Retard = require("../models/Retard.model"); // Make sure to provide the correct path to your Retard model
 const Vol = require("../models/Vol.model");
+const Contrat = require("../models/Contrat.model");
+
 // Create a new Retard
 async function createRetard(req, res) {
     try {
@@ -71,10 +73,25 @@ async function deleteRetardById(req, res) {
     }
 }
 
+async function affectContrat(req,res){
+   try{
+    const {contrat,retard} = req.body;
+    if (!contrat || !retard){
+        res.status(404).json({message:"contract or delay not specified"});
+    }
+    const updatedRetard = await Retard.findByIdAndUpdate(retard, { contrat: contrat }, { new: true });
+    res.status(200).json(updatedRetard);
+   }catch(error){
+    res.status(400).json(error);
+   }
+        
+}
+
 module.exports = {
     createRetard,
     getAllRetards,
     getRetardById,
     updateRetardById,
-    deleteRetardById
+    deleteRetardById,
+    affectContrat
 };

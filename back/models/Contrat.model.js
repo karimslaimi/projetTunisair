@@ -10,7 +10,11 @@ const contratSchema = new mongoose.Schema({
     articles: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ArticleContrat',
-      }],
+      }], 
+      retards: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Retard'
+      }]
 });
 
 const Contrat = mongoose.model('Contrat', contratSchema);

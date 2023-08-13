@@ -9,6 +9,7 @@ router.post('/add',isAuthenticated, checkRole("ADMIN"), retardController.createR
 router.get('/getAll',isAuthenticated, checkRole("ADMIN"), retardController.getAllRetards);
 router.get('/get/:id',isAuthenticated, checkRole("ADMIN"), retardController.getRetardById);
 router.put('/update/:id',isAuthenticated, checkRole("ADMIN"), retardController.updateRetardById);
+router.put('/affectContrat/',isAuthenticated, checkRole("ADMIN"), retardController.affectContrat);
 router.delete('/delete/:id',isAuthenticated, checkRole("ADMIN"), retardController.deleteRetardById);
 
 module.exports = router;
