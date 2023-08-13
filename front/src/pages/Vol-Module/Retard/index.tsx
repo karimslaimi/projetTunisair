@@ -94,15 +94,23 @@ function Main() {
                         print: false,
                         download: false,
                         formatter(cell) {
-                            const a =
+                            let a =
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
                                                       <a class="flex items-center mr-3" href="javascript:;">
-                                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
+                                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Affect Contrat
                                                       </a>
-                                                      <a class="flex items-center text-danger" href="javascript:;">
-                                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
-                                                      </a>
+                                                     
                                 </div>`);
+                            // @ts-ignore
+                            if (cell.getData().contrat){
+                                a = stringToHTML(`<div class="flex lg:justify-center items-center">
+                                                      <a class="flex items-center mr-3" href="javascript:;">
+                                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Voucher
+                                                      </a>
+                                                     
+                                </div>`);
+                            }
+
 
                             a.addEventListener("click", function (e) {
 

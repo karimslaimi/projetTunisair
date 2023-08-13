@@ -6,6 +6,7 @@ import {stringToHTML} from "../../../utils/helper";
 import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
+import {DateTime} from "luxon";
 
 
 function Main() {
@@ -27,12 +28,20 @@ function Main() {
 
     let a = refreshTab().then((res) => res);
     const handleDelete = (id: string) => {
-
-
+        contratService.deleteContrat(id).then(async (x) => {
+            alert("deleted successfully");
+            console.log(x);
+            await refreshTab();
+        }).catch((error)=>{
+            console.log("error occured");
+            alert(error.response.error);
+        });
     }
 
     const handleEdit = (id: string) => {
-
+        if (id) {
+            navigate("/contract/edit/" + id);
+        }
     }
 
     const tableRef = createRef<HTMLDivElement>();
@@ -73,7 +82,7 @@ function Main() {
                         vertAlign: "middle",
                         print: false,
                         download: false,
-                    },                    {
+                    }, {
                         title: "Menu",
                         minWidth: 200,
                         responsive: 0,
@@ -81,7 +90,7 @@ function Main() {
                         vertAlign: "middle",
                         print: false,
                         download: false,
-                    },                    {
+                    }, {
                         title: "Price",
                         minWidth: 200,
                         responsive: 0,
@@ -89,6 +98,32 @@ function Main() {
                         vertAlign: "middle",
                         print: false,
                         download: false,
+                    }, {
+                        title: "Starting Date",
+                        minWidth: 200,
+                        responsive: 0,
+                        field: "date_debut",
+                        vertAlign: "middle",
+                        formatter: cell => {
+                            const dateValue = cell.getValue();
+                            if (dateValue) {
+                                return DateTime.fromISO(dateValue).toFormat('dd/MM/yyyy');
+                            }
+                            return '';
+                        }
+                    }, {
+                        title: "Ending Date",
+                        minWidth: 200,
+                        responsive: 0,
+                        field: "date_fin",
+                        vertAlign: "middle",
+                        formatter: cell => {
+                            const dateValue = cell.getValue();
+                            if (dateValue) {
+                                return DateTime.fromISO(dateValue).toFormat('dd/MM/yyyy');
+                            }
+                            return '';
+                        }
                     },
                     {
                         title: "ACTIONS",
@@ -226,6 +261,8 @@ function Main() {
                                 className="w-full mt-2 2xl:w-full sm:mt-0 sm:w-auto"
                             >
                                 <option value="title">Title</option>
+                                <option value="libelle_menu">Menu</option>
+                                <option value="prix_menu">Price</option>
                             </FormSelect>
                         </div>
                         <div className="items-center mt-2 sm:flex sm:mr-4 xl:mt-0">

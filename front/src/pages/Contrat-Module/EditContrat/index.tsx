@@ -10,7 +10,7 @@ import {FieldValues, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import clsx from "clsx";
 import Toastify from "toastify-js";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Litepicker from "../../../base-components/Litepicker";
 import TomSelect from "../../../base-components/TomSelect";
 interface article{
@@ -20,7 +20,7 @@ interface article{
 
 function main() {
     const navigate = useNavigate();
-
+    const {id} = useParams();
     const [selectedArticles, setSelectedArticles] = useState<string[]>([''])
     let [articles, setArticles] = useState<article[]>([]);
     useEffect(() => {
@@ -29,6 +29,11 @@ function main() {
                 alert("an error occured");
                 console.log(error)
             });
+        contratService.getById(id??'').then(x=>{
+            if(x){
+                reset(x.data);
+            }
+        })
     }, []);
 
 
@@ -75,10 +80,10 @@ function main() {
             }).showToast();
         } else {
             let data: FieldValues = getValues();
-            contratService.addContrat(data).then((result: any) => {
+            contratService.updateContrat(id??'',data).then((result: any) => {
                 console.log(result);
                 if (result) {
-                    alert("contrat added successfully");
+                    alert("contrat updated successfully");
                     navigate("/contract");
                 }
             }).catch((e) => {
@@ -102,7 +107,6 @@ function main() {
     const handleFDateChange = (date: string) => {
         setValue("date_fin", date);
     }
-
 
     useEffect(() => {
         setSelectedArticles(getValues("articles"))
@@ -226,7 +230,7 @@ function main() {
                                            className="flex flex-col w-full sm:flex-row">Articles
                                 </FormLabel>
                                 <TomSelect
-                                    value={selectedArticles}
+                                    value={selectedArticles || []}
                                     onChange={(e) => setValue("articles",e)}
                                     placeholder="Select the articles"
                                     className={"w-full " + clsx({"border-danger": errors.articles})}

@@ -52,7 +52,7 @@ const getById = async (id: string) => {
     if (!id) return;
     let response;
     try {
-        response = await api.get("vol/get/" + id);
+        response = await api.get("/vol/get/" + id);
     } catch (error) {
         console.log(error);
         throw error;

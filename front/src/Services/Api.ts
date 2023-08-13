@@ -26,7 +26,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     response => response,
     error => {
-        debugger;
         if (error.response.status === 401 && error.response.data.message === 'Invalid token') {
             authService.signOut();
         }
