@@ -29,6 +29,11 @@ const initialState: SideMenuState = {
             title: "Users",
         },
         {
+            icon: "Box",
+            pathname: "/supplier",
+            title: "Supplier",
+        },
+        {
             icon: "Menu",
             pathname: "/articles",
             title: "Articles",

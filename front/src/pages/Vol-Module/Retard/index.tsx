@@ -6,12 +6,18 @@ import {stringToHTML} from "../../../utils/helper";
 import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
+import {Simulate} from "react-dom/test-utils";
+import click = Simulate.click;
+import AffectContrat from "../AffectContrat";
 
 
 function Main() {
     let navigate = useNavigate();
     let retards: any[] = [];
 
+    let [isOpen, setIsOpen] = useState(false);
+    let [isClosed, setIsClosed] = useState(true);
+    let [delayId, setDelayId] = useState('');
 
     const refreshTab = async () => {
         retardService.retardList().then((x: any) => {
@@ -26,13 +32,15 @@ function Main() {
     }
 
     let a = refreshTab().then((res) => res);
-    const handleDelete = (id: string) => {
+    const handleClickVoucher = (id: string) => {
 
 
     }
 
-    const handleEdit = (id: string) => {
-
+    const handleClickContract = (id: string) => {
+        setDelayId(id);
+        setIsClosed(false);
+        setIsOpen(true);
     }
 
     const tableRef = createRef<HTMLDivElement>();
@@ -96,7 +104,7 @@ function Main() {
                         formatter(cell) {
                             let a =
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
-                                                      <a class="flex items-center mr-3" href="javascript:;">
+                                                      <a class="contract flex items-center mr-3" href="javascript:;">
                                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Affect Contrat
                                                       </a>
                                                      
@@ -104,7 +112,7 @@ function Main() {
                             // @ts-ignore
                             if (cell.getData().contrat){
                                 a = stringToHTML(`<div class="flex lg:justify-center items-center">
-                                                      <a class="flex items-center mr-3" href="javascript:;">
+                                                      <a class="voucher flex items-center mr-3" href="javascript:;">
                                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Voucher
                                                       </a>
                                                      
@@ -119,16 +127,16 @@ function Main() {
 
                                 // Check if the clicked element is the 'Edit' link
                                 // @ts-ignore
-                                if (clickedElement.matches('.flex.items-center.mr-3')) {
+                                if (clickedElement.className && clickedElement.className.includes("contract")) {
                                     // @ts-ignore
-                                    handleEdit(cell.getData()._id);
+                                    handleClickContract(cell.getData()._id);
                                 }
 
                                 // Check if the clicked element is the 'Delete' link
                                 // @ts-ignore
                                 if (clickedElement.matches('.flex.items-center.text-danger')) {
                                     // @ts-ignore
-                                    handleDelete(cell.getData()._id);
+                                    handleClickVoucher(cell.getData()._id);
                                 }
                                 // On click actions
                             });
@@ -295,6 +303,10 @@ function Main() {
                 </div>
             </div>
             {/* END: HTML Table Data */}
+            <AffectContrat isOpen={isOpen} delayId={delayId} onClose={()=> {
+                setIsOpen(false);
+                setIsClosed(true);
+            }} />
         </>
     );
 }

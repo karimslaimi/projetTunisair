@@ -14,7 +14,11 @@ const contratSchema = new mongoose.Schema({
       retards: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Retard'
-      }]
+      }],
+      fournisseur:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Fournisseur'
+      }
 });
 
 const Contrat = mongoose.model('Contrat', contratSchema);

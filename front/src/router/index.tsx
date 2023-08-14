@@ -16,6 +16,9 @@ import Retard from "../pages/Vol-Module/Retard";
 import Contrats from "../pages/Contrat-Module/Contrats";
 import AddContrat from "../pages/Contrat-Module/AddContrat";
 import EditContrat from "../pages/Contrat-Module/EditContrat";
+import Suppliers from "../pages/Supplier-Module/Suppliers";
+import AddSupplier from "../pages/Supplier-Module/AddSupplier";
+import EditSupplier from "../pages/Supplier-Module/EditSupplier";
 
 
 function Router() {
@@ -46,6 +49,20 @@ function Router() {
         {
           path: "/users/edit/:id",
           element: <EditUser/>
+        },
+        //endregion
+        //region fournisseur
+        {
+          path: "/supplier",
+          element: <Suppliers/>
+        },
+        {
+          path: "/supplier/add",
+          element: <AddSupplier/>
+        },
+        {
+          path: "/supplier/edit/:id",
+          element: <EditSupplier/>
         },
         //endregion
         //region Article

@@ -1,22 +1,21 @@
 import {useNavigate} from "react-router-dom";
-import contratService from "../../../Services/ContratService";
+import supplierService from "../../../Services/SupplierService";
 import {createRef, useRef, useState} from "react";
 import {TabulatorFull as Tabulator} from "tabulator-tables";
 import {stringToHTML} from "../../../utils/helper";
 import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
-import {DateTime} from "luxon";
 
 
 function Main() {
     let navigate = useNavigate();
-    let contrats: any[] = [];
+    let suppliers: any[] = [];
 
 
     const refreshTab = async () => {
-        contratService.contratList().then((x: any) => {
-            contrats = x;
+        supplierService.supplierList().then((x: any) => {
+            suppliers = x;
             initTabulator();
             reInitOnResizeWindow();
 
@@ -28,19 +27,23 @@ function Main() {
 
     let a = refreshTab().then((res) => res);
     const handleDelete = (id: string) => {
-        contratService.deleteContrat(id).then(async (x) => {
-            alert("deleted successfully");
-            console.log(x);
-            await refreshTab();
-        }).catch((error)=>{
-            console.log("error occured");
-            alert(error.response.error);
-        });
+        let res = supplierService.deleteSupplier(id).then(async (res) => {
+            if (res) {
+                await refreshTab();
+                alert("Supplier deleted");
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+            alert("error occured");
+        })
+
     }
 
     const handleEdit = (id: string) => {
+        console.log(id);
         if (id) {
-            navigate("/contract/edit/" + id);
+            navigate("/supplier/edit/" + id);
         }
     }
 
@@ -55,7 +58,7 @@ function Main() {
     const initTabulator = () => {
         if (tableRef.current) {
             tabulator.current = new Tabulator(tableRef.current, {
-                data: contrats,
+                data: suppliers,
                 pagination: true,
                 paginationSize: 10,
                 paginationSizeSelector: [10, 20, 30, 40],
@@ -75,63 +78,22 @@ function Main() {
 
                     // For HTML table
                     {
-                        title: "Title",
+                        title: "Titre",
                         minWidth: 200,
                         responsive: 0,
                         field: "title",
                         vertAlign: "middle",
                         print: false,
                         download: false,
-                    }, {
-                        title: "Menu",
+                    },
+                    {
+                        title: "Email",
                         minWidth: 200,
                         responsive: 0,
-                        field: "libelle_menu",
+                        field: "email",
                         vertAlign: "middle",
                         print: false,
                         download: false,
-                    }, {
-                        title: "Supplier",
-                        minWidth: 200,
-                        responsive: 0,
-                        field: "fournisseur.title",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                    }, {
-                        title: "Price",
-                        minWidth: 200,
-                        responsive: 0,
-                        field: "prix_menu",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                    }, {
-                        title: "Starting Date",
-                        minWidth: 200,
-                        responsive: 0,
-                        field: "date_debut",
-                        vertAlign: "middle",
-                        formatter: cell => {
-                            const dateValue = cell.getValue();
-                            if (dateValue) {
-                                return DateTime.fromISO(dateValue).toFormat('dd/MM/yyyy');
-                            }
-                            return '';
-                        }
-                    }, {
-                        title: "Ending Date",
-                        minWidth: 200,
-                        responsive: 0,
-                        field: "date_fin",
-                        vertAlign: "middle",
-                        formatter: cell => {
-                            const dateValue = cell.getValue();
-                            if (dateValue) {
-                                return DateTime.fromISO(dateValue).toFormat('dd/MM/yyyy');
-                            }
-                            return '';
-                        }
                     },
                     {
                         title: "ACTIONS",
@@ -234,10 +196,10 @@ function Main() {
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
-                <h2 className="mr-auto text-lg font-medium">Contrats</h2>
+                <h2 className="mr-auto text-lg font-medium">Suppliers</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
                     <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
-                        Add New Contract
+                        Add New Supplier
                     </Button>
 
                 </div>
@@ -269,8 +231,6 @@ function Main() {
                                 className="w-full mt-2 2xl:w-full sm:mt-0 sm:w-auto"
                             >
                                 <option value="title">Title</option>
-                                <option value="libelle_menu">Menu</option>
-                                <option value="prix_menu">Price</option>
                             </FormSelect>
                         </div>
                         <div className="items-center mt-2 sm:flex sm:mr-4 xl:mt-0">

@@ -1,12 +1,15 @@
 const Article = require("../models/Article.model"); // Make sure to provide the correct path to your Retard model
 const Contrat = require("../models/Contrat.model");
 const ArticleContrat = require("../models/ArticleContrat.model");
+const Fournisseur = require("../models/Fournisseur.model");
 
 
 async function createContrat(req, res) {
     try {
         const contratData = req.body;
-
+        const fournisseurId = contratData.fournisseur; 
+        const fournisseur = await Fournisseur.findById(fournisseurId);
+        contratData.fournisseur = fournisseur._id;
         const savedContrat = await Contrat.create(contratData);
 
         // No need to fetch the entire Article, just use the ID directly
@@ -27,7 +30,8 @@ async function createContrat(req, res) {
 
 async function getAllContrat(req,res){
     try{
-        const contrats = await Contrat.find().populate("articles");
+        const contrats = await Contrat.find().populate("fournisseur","title").populate("articles").exec();
+        console.log(contrats);
         res.status(200).json(contrats);
 
     }catch(error){

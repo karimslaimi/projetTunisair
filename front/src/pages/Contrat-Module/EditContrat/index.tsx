@@ -13,6 +13,7 @@ import Toastify from "toastify-js";
 import {useNavigate, useParams} from "react-router-dom";
 import Litepicker from "../../../base-components/Litepicker";
 import TomSelect from "../../../base-components/TomSelect";
+import supplierService from "../../../Services/SupplierService";
 interface article{
     title:string,
     _id:string
@@ -23,6 +24,8 @@ function main() {
     const {id} = useParams();
     const [selectedArticles, setSelectedArticles] = useState<string[]>([''])
     let [articles, setArticles] = useState<article[]>([]);
+    let [suppliers, setSuppliers] = useState<any[]>([]);
+
     useEffect(() => {
         articleService.articleList().then(x => setArticles(x))
             .catch((error) => {
@@ -33,7 +36,9 @@ function main() {
             if(x){
                 reset(x.data);
             }
-        })
+        });
+        supplierService.supplierList().then(x=> setSuppliers(x)).catch(err=>alert("an error occured"));
+
     }, []);
 
 
@@ -45,6 +50,7 @@ function main() {
             date_debut: yup.date().required(),
             date_fin: yup.date().required(),
             articles: yup.array().required(),
+            fournisseur: yup.string().required(),
         })
         .required();
 
@@ -250,6 +256,34 @@ function main() {
                                     <div className="mt-2 text-danger">
                                         {typeof errors.articles.message === "string" &&
                                             errors.articles.message}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="mt-3 input-form">
+                                <FormLabel htmlFor="supplier"
+                                           className="flex flex-col w-full sm:flex-row">Supplier
+                                </FormLabel>
+                                <TomSelect
+                                    value={getValues("fournisseur")}
+                                    onChange={(e) => setValue("fournisseur",e)}
+                                    placeholder="Select the supplier"
+                                    className={"w-full " + clsx({"border-danger": errors.fournisseur})}
+                                >
+                                    <option>Select supplier</option>
+                                    {suppliers.map(option => {
+                                        return (
+                                            < option
+                                                key={option._id}
+                                                value={option._id}>
+                                                {option.title}
+                                            </option>
+                                        )
+                                    })}
+                                </TomSelect>
+                                {errors.fournisseur && (
+                                    <div className="mt-2 text-danger">
+                                        {typeof errors.fournisseur.message === "string" &&
+                                            errors.fournisseur.message}
                                     </div>
                                 )}
                             </div>

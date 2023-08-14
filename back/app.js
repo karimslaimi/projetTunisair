@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
-const UserRoutes = require("./routes/UserRoutes");
+const UserRoutes = require("./routes/User.routes");
 const mongoose = require("mongoose");
-const AuthRoutes = require("./routes/AuthRoutes");
-const ArticleRoutes = require("./routes/ArticleRoutes");
-const VolRoutes = require("./routes/VolRoutes");
-const RetardRoutes = require("./routes/RetardRoutes");
-const ContratRoutes = require("./routes/ContratsRoutes");
+const AuthRoutes = require("./routes/Auth.routes");
+const ArticleRoutes = require("./routes/Article.routes");
+const VolRoutes = require("./routes/Vol.routes");
+const RetardRoutes = require("./routes/Retard.routes");
+const ContratRoutes = require("./routes/Contrats.routes");
+const fournisseurRoutes = require("./routes/fournisseur.routes");
 const cors = require('cors'); 
 
 mongoose
@@ -29,6 +30,7 @@ app.use('/article',ArticleRoutes);
 app.use('/vol',VolRoutes);
 app.use('/retard', RetardRoutes);
 app.use('/contrat',ContratRoutes);
+app.use("/supplier",fournisseurRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;

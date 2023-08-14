@@ -27,9 +27,21 @@ const retardList = async ()=>{
     }
 }
 
+const affectContrat = async (delayId:string, contratId:string)=>{
+    let response;
+    try {
+        response = await api.put("/retard/affectContrat",{contrat:contratId,retard:delayId});
+        return response.data;
+    }catch (error:any){
+        console.log(error.response.data.message);
+        throw error;
+    }
+}
+
 
 
 export default {
     addDelay,
     retardList,
+    affectContrat,
 }

@@ -20,7 +20,6 @@ async function createRetard(req, res) {
 async function getAllRetards(req, res) {
     try {
         const retards = await Retard.find().populate("vol");
-        console.log(retards);
         res.status(200).json(retards);
     } catch (error) {
         res.status(500).json({ error: error.message });
