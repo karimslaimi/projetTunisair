@@ -19,6 +19,7 @@ import EditContrat from "../pages/Contrat-Module/EditContrat";
 import Suppliers from "../pages/Supplier-Module/Suppliers";
 import AddSupplier from "../pages/Supplier-Module/AddSupplier";
 import EditSupplier from "../pages/Supplier-Module/EditSupplier";
+import Vouchers from "../pages/Voucher-Module/Vouchers";
 
 
 function Router() {
@@ -111,8 +112,13 @@ function Router() {
         {
           path: "/contract/edit/:id",
           element: <EditContrat/>
-        }
+        },
         //endregion
+        {
+          path: "/voucher/:id",
+          element: <Vouchers/>
+        }
+
       ]
     },
 

@@ -1,26 +1,22 @@
-import {useNavigate} from "react-router-dom";
-import retardService from "../../../Services/RetardService";
+import {useNavigate, useParams} from "react-router-dom";
+import voucherService from "../../../Services/VoucherService";
 import {createRef, useRef, useState} from "react";
 import {TabulatorFull as Tabulator} from "tabulator-tables";
 import {stringToHTML} from "../../../utils/helper";
 import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
-import {Simulate} from "react-dom/test-utils";
-import AffectContrat from "../AffectContrat";
 
 
 function Main() {
     let navigate = useNavigate();
-    let retards: any[] = [];
+    const {id} = useParams();
+    let vouchers: any[] = [];
 
-    let [isOpen, setIsOpen] = useState(false);
-    let [isClosed, setIsClosed] = useState(true);
-    let [delayId, setDelayId] = useState('');
 
     const refreshTab = async () => {
-        retardService.retardList().then((x: any) => {
-            retards = x;
+        voucherService.voucherList(id??"").then((x: any) => {
+            vouchers = x;
             initTabulator();
             reInitOnResizeWindow();
 
@@ -31,23 +27,31 @@ function Main() {
     }
 
     let a = refreshTab().then((res) => res);
-
-    const handleClickVoucher = (id: string) => {
-        console.log(id);
-        navigate("/voucher/"+id);
+    const handleDelete = (id: string) => {
+        let res = voucherService.deleteVoucher(id).then(async (res) => {
+            if (res) {
+                await refreshTab();
+                alert("Voucher deleted");
+            }
+            return res;
+        }).catch((e) => {
+            console.log(e);
+            alert("error occured");
+        })
 
     }
 
-    const handleClickContract = (id: string) => {
-        setDelayId(id);
-        setIsClosed(false);
-        setIsOpen(true);
+    const handleEdit = (id: string) => {
+        console.log(id);
+        if (id) {
+            navigate("/voucher/edit/" + id);
+        }
     }
 
     const tableRef = createRef<HTMLDivElement>();
     const tabulator = useRef<Tabulator>();
     const [filter, setFilter] = useState({
-        field: "vol.num_vol",
+        field: "title",
         type: "like",
         value: "",
     });
@@ -55,7 +59,7 @@ function Main() {
     const initTabulator = () => {
         if (tableRef.current) {
             tabulator.current = new Tabulator(tableRef.current, {
-                data: retards,
+                data: vouchers,
                 pagination: true,
                 paginationSize: 10,
                 paginationSizeSelector: [10, 20, 30, 40],
@@ -75,19 +79,46 @@ function Main() {
 
                     // For HTML table
                     {
-                        title: "Flight Number",
+                        title: "First Name",
                         minWidth: 200,
                         responsive: 0,
-                        field: "vol.num_vol",
+                        field: "prenom",
                         vertAlign: "middle",
                         print: false,
                         download: false,
                     },
                     {
-                        title: "Duration",
+                        title: "LastName",
                         minWidth: 200,
                         responsive: 0,
-                        field: "duree_retard",
+                        field: "nom",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
+                    },
+                    {
+                        title: "Supplier",
+                        minWidth: 200,
+                        responsive: 0,
+                        field: "fournisseur",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
+                    },
+                    {
+                        title: "Price",
+                        minWidth: 200,
+                        responsive: 0,
+                        field: "prix",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
+                    },
+                    {
+                        title: "Date",
+                        minWidth: 200,
+                        responsive: 0,
+                        field: "date",
                         vertAlign: "middle",
                         print: false,
                         download: false,
@@ -103,23 +134,18 @@ function Main() {
                         print: false,
                         download: false,
                         formatter(cell) {
-                            let a =
+                            const a =
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
-                                                      <a class="contract flex items-center mr-3" href="javascript:;">
-                                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Affect Contrat
+                                                      <a class="edit flex items-center mr-3" href="javascript:;">
+                                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
                                                       </a>
-                                                     
-                                </div>`);
-                            // @ts-ignore
-                            if (cell.getData().contrat){
-                                a = stringToHTML(`<div class="flex lg:justify-center items-center">
-                                                      <a class="voucher flex items-center mr-3" href="javascript:;">
-                                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Voucher
+                                                      <a class="delete flex items-center text-danger mr-3" href="javascript:;">
+                                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
                                                       </a>
-                                                     
+                                                       <a class="mail flex items-center text-success mr-3" href="javascript:;">
+                                                        <i data-lucide="mail" class="w-4 h-4 mr-1"></i> mail
+                                                      </a>
                                 </div>`);
-                            }
-
 
                             a.addEventListener("click", function (e) {
 
@@ -128,16 +154,20 @@ function Main() {
 
                                 // Check if the clicked element is the 'Edit' link
                                 // @ts-ignore
-                                if (clickedElement.className && clickedElement.className.includes("contract")) {
+                                if (clickedElement.className.includes('edit')) {
                                     // @ts-ignore
-                                    handleClickContract(cell.getData()._id);
+                                    handleEdit(cell.getData()._id);
                                 }
 
                                 // Check if the clicked element is the 'Delete' link
                                 // @ts-ignore
-                                if (clickedElement.className && clickedElement.className.includes('voucher')) {
+                                if (clickedElement.className.includes('delete')) {
                                     // @ts-ignore
-                                    handleClickVoucher(cell.getData()._id);
+                                    handleDelete(cell.getData()._id);
+                                }
+                                // @ts-ignore
+                                if (clickedElement.className.includes("mail")){
+                                    console.log("email");
                                 }
                                 // On click actions
                             });
@@ -193,12 +223,21 @@ function Main() {
         onFilter();
     };
 
+    const handleAddClick = () => {
+        navigate("add");
+    }
+
 
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
-                <h2 className="mr-auto text-lg font-medium">Delays</h2>
+                <h2 className="mr-auto text-lg font-medium">Suppliers</h2>
+                <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
+                    <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
+                        Add Voucher
+                    </Button>
 
+                </div>
             </div>
             {/* BEGIN: HTML Table Data */}
             <div className="p-5 mt-5 intro-y box">
@@ -226,8 +265,9 @@ function Main() {
                                 }}
                                 className="w-full mt-2 2xl:w-full sm:mt-0 sm:w-auto"
                             >
-                                <option value="vol.num_vol">Flight N°</option>
-                                <option value="duree_retard">Duration</option>
+                                <option value="prenom">First Name</option>
+                                <option value="nom">Last Name</option>
+                                <option value="retard.vol.number">Flight</option>
                             </FormSelect>
                         </div>
                         <div className="items-center mt-2 sm:flex sm:mr-4 xl:mt-0">
@@ -300,10 +340,6 @@ function Main() {
                 </div>
             </div>
             {/* END: HTML Table Data */}
-            <AffectContrat isOpen={isOpen} delayId={delayId} onClose={()=> {
-                setIsOpen(false);
-                setIsClosed(true);
-            }} />
         </>
     );
 }
