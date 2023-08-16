@@ -5,7 +5,19 @@ const Bon = require('../models/Bon.model');
 const getbonByRetard = async (req, res) => {
     try {
         const retardId = req.params.retard_id;
-        const bons = await Bon.find({ retard: retardId }).populate("retard","vol","vol.number").populate("contrat").exec();
+        const bons = await Bon.find({ retard: retardId }) .populate({
+            path: "retard",
+            populate: {
+              path: "vol",
+              select: "vol_num", 
+            },
+          }).populate({
+            path: "retard",
+            populate: {
+              path: "contrat",
+              select: "title", 
+            },
+          }).exec();
         return res.status(200).json(bons);
     } catch (error) {
         res.status(500).json({ error: error.message });

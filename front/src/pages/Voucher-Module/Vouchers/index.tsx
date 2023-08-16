@@ -6,16 +6,21 @@ import {stringToHTML} from "../../../utils/helper";
 import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
+import {DateTime} from "luxon";
+import VoucherQrcode from "../VoucherQrcode";
 
 
 function Main() {
     let navigate = useNavigate();
     const {id} = useParams();
     let vouchers: any[] = [];
-
+    let [isOpen, setIsOpen] = useState(false);
+    let [isClosed, setIsClosed] = useState(true);
+    let [voucherId, setVoucherId] = useState('');
+//todo qrcode
 
     const refreshTab = async () => {
-        voucherService.voucherList(id??"").then((x: any) => {
+        voucherService.voucherList(id ?? "").then((x: any) => {
             vouchers = x;
             initTabulator();
             reInitOnResizeWindow();
@@ -41,11 +46,18 @@ function Main() {
 
     }
 
-    const handleEdit = (id: string) => {
+    const handleEdit = (idVoucher: string) => {
         console.log(id);
         if (id) {
-            navigate("/voucher/edit/" + id);
+            navigate("/voucher/" + id + "/edit/" + idVoucher);
         }
+    }
+
+    const handleQrCode = (idVoucher: string) => {
+        if (!idVoucher) return;
+        setVoucherId(idVoucher);
+        setIsClosed(false);
+        setIsOpen(true);
     }
 
     const tableRef = createRef<HTMLDivElement>();
@@ -80,7 +92,7 @@ function Main() {
                     // For HTML table
                     {
                         title: "First Name",
-                        minWidth: 200,
+                        minWidth: 180,
                         responsive: 0,
                         field: "prenom",
                         vertAlign: "middle",
@@ -89,7 +101,7 @@ function Main() {
                     },
                     {
                         title: "LastName",
-                        minWidth: 200,
+                        minWidth: 180,
                         responsive: 0,
                         field: "nom",
                         vertAlign: "middle",
@@ -98,16 +110,32 @@ function Main() {
                     },
                     {
                         title: "Supplier",
-                        minWidth: 200,
+                        minWidth: 180,
                         responsive: 0,
                         field: "fournisseur",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
+                    }, {
+                        title: "Flight",
+                        minWidth: 180,
+                        responsive: 0,
+                        field: "vol",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
+                    }, {
+                        title: "Contract",
+                        minWidth: 180,
+                        responsive: 0,
+                        field: "retard.contrat.title",
                         vertAlign: "middle",
                         print: false,
                         download: false,
                     },
                     {
                         title: "Price",
-                        minWidth: 200,
+                        minWidth: 150,
                         responsive: 0,
                         field: "prix",
                         vertAlign: "middle",
@@ -116,16 +144,21 @@ function Main() {
                     },
                     {
                         title: "Date",
-                        minWidth: 200,
+                        minWidth: 160,
                         responsive: 0,
                         field: "date",
                         vertAlign: "middle",
-                        print: false,
-                        download: false,
+                        formatter: cell => {
+                            const dateValue = cell.getValue();
+                            if (dateValue) {
+                                return DateTime.fromISO(dateValue).toFormat('dd/MM/yyyy');
+                            }
+                            return '';
+                        }
                     },
                     {
                         title: "ACTIONS",
-                        minWidth: 200,
+                        minWidth: 210,
                         field: "actions",
                         responsive: 1,
                         hozAlign: "center",
@@ -142,8 +175,8 @@ function Main() {
                                                       <a class="delete flex items-center text-danger mr-3" href="javascript:;">
                                                         <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
                                                       </a>
-                                                       <a class="mail flex items-center text-success mr-3" href="javascript:;">
-                                                        <i data-lucide="mail" class="w-4 h-4 mr-1"></i> mail
+                                                      <a class="qrcode flex items-center text-blue-950 mr-3" href="javascript:;">
+                                                        <i data-lucide="qr-code" class="w-4 h-4 mr-1"></i> QRcode
                                                       </a>
                                 </div>`);
 
@@ -166,8 +199,9 @@ function Main() {
                                     handleDelete(cell.getData()._id);
                                 }
                                 // @ts-ignore
-                                if (clickedElement.className.includes("mail")){
-                                    console.log("email");
+                                if (clickedElement.className.includes('qrcode')) {
+                                    // @ts-ignore
+                                    handleQrCode(cell.getData()._id);
                                 }
                                 // On click actions
                             });
@@ -231,7 +265,7 @@ function Main() {
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
-                <h2 className="mr-auto text-lg font-medium">Suppliers</h2>
+                <h2 className="mr-auto text-lg font-medium">Vouchers</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
                     <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
                         Add Voucher
@@ -340,6 +374,10 @@ function Main() {
                 </div>
             </div>
             {/* END: HTML Table Data */}
+            <VoucherQrcode isOpen={isOpen} voucherId={voucherId} onClose={() => {
+                setIsOpen(false);
+                setIsClosed(true);
+            }}/>
         </>
     );
 }

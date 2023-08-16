@@ -15,7 +15,7 @@ import supplierService from "../../../Services/SupplierService";
 import voucherService from "../../../Services/VoucherService";
 
 function main() {
-    const {idDelay} = useParams();
+    const {id, idDelay} = useParams();
     const navigate = useNavigate();
     const [message, setMessage] = useState("");
     const [vols, setVols] = useState<any[]>([]);
@@ -27,7 +27,7 @@ function main() {
                 console.log(error)
             });
         supplierService.supplierList().then(x => setSuppliers(x)).catch(err => alert("an error occured"));
-
+        voucherService.getById(id ?? '').then(x => x ? reset(x.data) : alert("an error occured")).catch(() => alert("an error occured"));
     }, []);
 
     const schema = yup
@@ -74,9 +74,9 @@ function main() {
             setValue("retard", idDelay);
             let data: FieldValues = getValues();
 
-            voucherService.createVoucher(data).then((result: any) => {
+            voucherService.updateVoucher(id ?? '', data).then((result: any) => {
                 if (result) {
-                    alert("Voucher added successfully");
+                    alert("Voucher updated successfully");
                     navigate(`/voucher/${idDelay}`);
                 }
             }).catch((e) => {

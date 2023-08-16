@@ -20,111 +20,123 @@ import Suppliers from "../pages/Supplier-Module/Suppliers";
 import AddSupplier from "../pages/Supplier-Module/AddSupplier";
 import EditSupplier from "../pages/Supplier-Module/EditSupplier";
 import Vouchers from "../pages/Voucher-Module/Vouchers";
+import AddVoucher from "../pages/Voucher-Module/AddVoucher";
+import EditVoucher from "../pages/Voucher-Module/EditVoucher";
 
 
 function Router() {
-  const isLoggedIn = useSelector((state: any) => state.userData.isAuthenticated);
-  const routes = [
-    {
+    const isLoggedIn = useSelector((state: any) => state.userData.isAuthenticated);
+    const routes = [
+        {
 
-      path: "/login",
-      element: <Login/>
-    },
-    {
-      path: "/",
-      element: isLoggedIn ? <SideMenu/> : <Navigate to="/login"/>,
-      children: [
-        {
-          path: "/",
-          element: <Dashboard/>,
-        },
-        //region user
-        {
-          path: "/users",
-          element: <Users/>,
+            path: "/login",
+            element: <Login/>
         },
         {
-          path: "/users/add",
-          element: <AddUser/>,
-        },
-        {
-          path: "/users/edit/:id",
-          element: <EditUser/>
-        },
-        //endregion
-        //region fournisseur
-        {
-          path: "/supplier",
-          element: <Suppliers/>
-        },
-        {
-          path: "/supplier/add",
-          element: <AddSupplier/>
-        },
-        {
-          path: "/supplier/edit/:id",
-          element: <EditSupplier/>
-        },
-        //endregion
-        //region Article
-        {
-          path: "/articles",
-          element: <Articles/>
-        },
-        {
-          path: "/articles/add",
-          element: <AddArticle/>
-        },
-        {
-          path: "/articles/edit/:id",
-          element: <EditArticle/>
-        },
-        //endregion
-        //region Vols
-        {
-          path: "/vols",
-          element: <Vols/>
-        },
-        {
-          path: "/vols/add",
-          element: <AddVol/>
-        },
-        {
-          path: "/vols/edit/:id",
-          element: <EditVol/>
-        },
-        //endregion
-        //region retard
-        {
-          path: "/retards",
-          element: <Retard/>
-        },
-        //endregion
-        //region contrat
-        {
-          path: "/contract",
-          element: <Contrats/>
-        },
-        {
-          path: "/contract/add",
-          element: <AddContrat/>
-        },
-        {
-          path: "/contract/edit/:id",
-          element: <EditContrat/>
-        },
-        //endregion
-        {
-          path: "/voucher/:id",
-          element: <Vouchers/>
-        }
+            path: "/",
+            element: isLoggedIn ? <SideMenu/> : <Navigate to="/login"/>,
+            children: [
+                {
+                    path: "/",
+                    element: <Dashboard/>,
+                },
+                //region user
+                {
+                    path: "/users",
+                    element: <Users/>,
+                },
+                {
+                    path: "/users/add",
+                    element: <AddUser/>,
+                },
+                {
+                    path: "/users/edit/:id",
+                    element: <EditUser/>
+                },
+                //endregion
+                //region fournisseur
+                {
+                    path: "/supplier",
+                    element: <Suppliers/>
+                },
+                {
+                    path: "/supplier/add",
+                    element: <AddSupplier/>
+                },
+                {
+                    path: "/supplier/edit/:id",
+                    element: <EditSupplier/>
+                },
+                //endregion
+                //region Article
+                {
+                    path: "/articles",
+                    element: <Articles/>
+                },
+                {
+                    path: "/articles/add",
+                    element: <AddArticle/>
+                },
+                {
+                    path: "/articles/edit/:id",
+                    element: <EditArticle/>
+                },
+                //endregion
+                //region Vols
+                {
+                    path: "/vols",
+                    element: <Vols/>
+                },
+                {
+                    path: "/vols/add",
+                    element: <AddVol/>
+                },
+                {
+                    path: "/vols/edit/:id",
+                    element: <EditVol/>
+                },
+                //endregion
+                //region retard
+                {
+                    path: "/retards",
+                    element: <Retard/>
+                },
+                //endregion
+                //region contrat
+                {
+                    path: "/contract",
+                    element: <Contrats/>
+                },
+                {
+                    path: "/contract/add",
+                    element: <AddContrat/>
+                },
+                {
+                    path: "/contract/edit/:id",
+                    element: <EditContrat/>
+                },
+                //endregion
 
-      ]
-    },
+                //region voucher
+                {
+                    path: "/voucher/:id",
+                    element: <Vouchers/>
+                },
+                {
+                    path: "/voucher/:idDelay/add",
+                    element: <AddVoucher/>
+                }, {
+                    path: "/voucher/:idDelay/edit/:id",
+                    element: <EditVoucher/>
+                },
+                //endregion
 
-  ];
+            ]
+        },
 
-  return useRoutes(routes);
+    ];
+
+    return useRoutes(routes);
 }
 
 

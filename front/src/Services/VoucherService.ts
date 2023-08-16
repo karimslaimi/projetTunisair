@@ -58,7 +58,7 @@ const getById = async (id: string) => {
         console.log(error);
         throw error;
     }
-    return response;
+    return response.data;
 }
 
 export default {

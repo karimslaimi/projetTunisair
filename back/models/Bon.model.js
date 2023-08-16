@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const bonSchema = new mongoose.Schema({
-    id_bon: { type: String, required: true },
     nom: { type: String, required: true },
     prenom: { type: String, required: true },
     vol: { type: String, required: true },
@@ -9,6 +8,7 @@ const bonSchema = new mongoose.Schema({
     prix: { type: Number, required: true },
     date: { type: Date, default: Date.now },
     retard: { type: mongoose.Schema.Types.ObjectId, ref: 'Retard' },
+    consumed : {type: Boolean, default: false},
 });
 
 module.exports = mongoose.model('Bon', bonSchema);
