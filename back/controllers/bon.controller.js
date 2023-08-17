@@ -91,6 +91,20 @@ const deleteBonById = async (req, res) => {
     }
 };
 
+const consumeBon = async (req,res)=>{
+    try{
+        const id =req.params.id;
+        if (!id) res.status(200).json(null);
+        const bon = await Bon.findById(id);
+        bon.consumed = true;
+        const updatedBon = await Bon.findByIdAndUpdate(id, bon, { new: true });
+        res.status(200).json(updatedBon);
+
+    }catch (error){
+        res.status.json({error:error.message});
+    }
+}
+
 module.exports = {
     getbonByRetard,
     createBon,
@@ -98,4 +112,5 @@ module.exports = {
     getBonById,
     updateBonById,
     deleteBonById,
+    consumeBon,
 }
