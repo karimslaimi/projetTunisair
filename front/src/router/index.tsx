@@ -22,6 +22,7 @@ import EditSupplier from "../pages/Supplier-Module/EditSupplier";
 import Vouchers from "../pages/Voucher-Module/Vouchers";
 import AddVoucher from "../pages/Voucher-Module/AddVoucher";
 import EditVoucher from "../pages/Voucher-Module/EditVoucher";
+import VerifyVoucher from "../pages/Voucher-Module/VerifyVoucher";
 
 
 function Router() {
@@ -125,13 +126,19 @@ function Router() {
                 {
                     path: "/voucher/:idDelay/add",
                     element: <AddVoucher/>
-                }, {
+                },
+                {
                     path: "/voucher/:idDelay/edit/:id",
                     element: <EditVoucher/>
                 },
+
                 //endregion
 
             ]
+        },
+        {
+            path: "/voucher/verify/:id",
+            element: <VerifyVoucher/>
         },
 
     ];

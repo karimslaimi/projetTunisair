@@ -157,6 +157,26 @@ function Main() {
                         }
                     },
                     {
+                        title: "STATUS",
+                        minWidth: 130,
+                        field: "consumed",
+                        hozAlign: "center",
+                        headerHozAlign: "center",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
+                        formatter(cell) {
+                            const response: any = cell.getData();
+                            return `<div class="flex items-center lg:justify-center ${
+                                !response.consumed ? "text-success" : "text-danger"
+                            }">
+                            <i data-lucide=${!response.consumed ? "check-square" : "x-circle"} class="w-4 h-4 mr-2"></i> ${
+                                !response.consumed ? "Available" : "Consumed"
+                            }
+                          </div>`;
+                        },
+                    },
+                    {
                         title: "ACTIONS",
                         minWidth: 210,
                         field: "actions",

@@ -61,10 +61,22 @@ const getById = async (id: string) => {
     return response.data;
 }
 
+const consumeVoucher = async (id: string) => {
+    if (!id) return;
+    let response;
+    try {
+        response = await api.put("/bon/consume/" + id);
+    } catch (error) {
+        console.log(error);
+    }
+    return response;
+}
+
 export default {
     createVoucher,
     voucherList,
     deleteVoucher,
     updateVoucher,
     getById,
+    consumeVoucher,
 }

@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Lucide from "../../base-components/Lucide";
 import logoUrl from "../../assets/images/logo.svg";
 import Breadcrumb from "../../base-components/Breadcrumb";
@@ -9,7 +9,7 @@ import {useSelector} from "react-redux";
 import authService from "../../Services/AuthService";
 
 function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
-
+    const navigator = useNavigate();
     const user = useSelector((state: any) => state.userData.user);
   return (
     <>
@@ -80,7 +80,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
                   </div>
               </Menu.Header>
               <Menu.Divider className="bg-white/[0.08]" />
-              <Menu.Item className="hover:bg-white/5">
+                <Menu.Item className="hover:bg-white/5" onClick={() => navigator("/users/edit/" + user.id)}>
                 <Lucide icon="User" className="w-4 h-4 mr-2" /> Profile
               </Menu.Item>
 

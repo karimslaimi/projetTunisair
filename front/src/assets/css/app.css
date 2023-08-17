@@ -73,3 +73,9 @@
 @import "./components/_litepicker.css";
 @import "./components/_full-calendar.css";
 @import "./components/_tabulator.css";
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}

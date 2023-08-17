@@ -4,6 +4,7 @@ import React, {useEffect, useRef, useState} from "react";
 import voucherService from "../../../Services/VoucherService";
 import {APP_URL} from "../../../utils/config";
 import QRCode from "qrcode.react";
+import Lucide from "../../../base-components/Lucide";
 
 interface ModalProps {
     isOpen: boolean;
@@ -21,15 +22,14 @@ function main({isOpen, onClose, voucherId}: ModalProps) {
         if (isOpen) {
             voucherService.getById(voucherId ?? '').then(x => {
                 setVoucher(x);
-                console.log(x);//fixme there is error in voucher not getting set
-                setValue(APP_URL + "/voucher/verify/" + voucher._id);
+                setValue(APP_URL + "/voucher/verify/" + x._id);
             });
         }
 
     }, [isOpen]);
 
 
-    return value !== '' ?
+    return isOpen ? value !== '' ?
         (<>
 
 
@@ -48,26 +48,33 @@ function main({isOpen, onClose, voucherId}: ModalProps) {
                             <div className={"flex justify-center items-center h-64"}>
                                 <QRCode value={value} size={size}/>
                             </div>
+                            <div className={"flex justify-center items-center mt-2 no-print"}>
+                                <Button
+                                    id="tabulator-print"
+                                    variant="outline-secondary"
+                                    className="w-1/2 mr-2 sm:w-auto"
+                                    onClick={() => window.print()}
+                                >
+                                    <Lucide icon="Printer" className="w-4 h-4 mr-2"/> Print
+                                </Button>
+                            </div>
                         </div>
                     </Dialog.Description>
-                    <Dialog.Footer>
+                    <Dialog.Footer className={"no-print"}>
                         <Button type="button" variant="outline-secondary" className="w-20 mr-1" onClick={() => {
                             onClose()
                         }}>
-                            Cancel
-                        </Button>
-                        <Button variant="primary" type="submit" className="w-20" ref={sendButtonRef}>
-                            Save
+                            Ok
                         </Button>
 
                     </Dialog.Footer>
                 </Dialog.Panel>
             </Dialog>
-            )
+
 
             {/* END: Modal Content */}
         </>)
-        : <p>Loading...</p>;
+        : <p>Loading...</p> : <></>;
 }
 
 export default main;
