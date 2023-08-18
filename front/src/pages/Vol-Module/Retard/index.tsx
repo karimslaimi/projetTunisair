@@ -15,7 +15,6 @@ function Main() {
     let retards: any[] = [];
 
     let [isOpen, setIsOpen] = useState(false);
-    let [isClosed, setIsClosed] = useState(true);
     let [delayId, setDelayId] = useState('');
 
     const refreshTab = async () => {
@@ -40,7 +39,6 @@ function Main() {
 
     const handleClickContract = (id: string) => {
         setDelayId(id);
-        setIsClosed(false);
         setIsOpen(true);
     }
 
@@ -300,10 +298,7 @@ function Main() {
                 </div>
             </div>
             {/* END: HTML Table Data */}
-            <AffectContrat isOpen={isOpen} delayId={delayId} onClose={()=> {
-                setIsOpen(false);
-                setIsClosed(true);
-            }} />
+            <AffectContrat isOpen={isOpen} delayId={delayId} onClose={()=> setIsOpen(false)} />
         </>
     );
 }

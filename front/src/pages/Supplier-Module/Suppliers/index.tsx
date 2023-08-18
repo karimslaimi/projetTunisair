@@ -6,12 +6,14 @@ import {stringToHTML} from "../../../utils/helper";
 import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
+import EmailModal from "../EmailModal";
 
 
 function Main() {
     let navigate = useNavigate();
     let suppliers: any[] = [];
-
+    let [isOpen, setIsOpen] = useState(false);
+    let [supplierId, setSupplierId] = useState('');
 
     const refreshTab = async () => {
         supplierService.supplierList().then((x: any) => {
@@ -44,6 +46,13 @@ function Main() {
         console.log(id);
         if (id) {
             navigate("/supplier/edit/" + id);
+        }
+    }
+    const handleMailClick =(id:string)=>{
+        console.log(id);
+        if(id){
+            setSupplierId(id);
+            setIsOpen(true);
         }
     }
 
@@ -139,7 +148,8 @@ function Main() {
                                 }
                                 // @ts-ignore
                                 if (clickedElement.className.includes("mail")){
-                                    console.log("email");
+                                    // @ts-ignore
+                                    handleMailClick(cell.getData()._id);
                                 }
                                 // On click actions
                             });
@@ -310,6 +320,7 @@ function Main() {
                 </div>
             </div>
             {/* END: HTML Table Data */}
+            <EmailModal isOpen={isOpen} supplierId={supplierId} onClose={()=> setIsOpen(false)} />
         </>
     );
 }

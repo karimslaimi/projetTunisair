@@ -50,10 +50,23 @@ const updateSupplier = async (id: string, data: any) => {
 
 const getById = async (id: string) => {
     if (!id) return;
-    let response;
+    let response:any;
     try {
         response = await api.get("supplier/get/" + id);
     } catch (error) {
+        console.log(error);
+        throw error;
+    }
+    return response;
+}
+
+
+const sendMail = async (id:string, subject:string,message:string)=>{
+    if(!id) return;
+    let response;
+    try {
+        response = await api.post("/supplier/sendmail/"+id,{subject,message});
+    }catch (error){
         console.log(error);
         throw error;
     }
@@ -66,5 +79,6 @@ export default {
     deleteSupplier,
     updateSupplier,
     getById,
+    sendMail,
 }
 

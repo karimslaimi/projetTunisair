@@ -8,4 +8,6 @@ router.get('/get/:id', FournisseurController.getFournisseurById);
 router.put('/update/:id', FournisseurController.updateFournisseur);
 router.delete('/delete/:id', FournisseurController.deleteFournisseur);
 
+router.post("/sendmail/:id",FournisseurController.sendMail);
+
 module.exports = router;

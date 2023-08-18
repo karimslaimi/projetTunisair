@@ -1,4 +1,6 @@
+const { MAIL_CONFIG, FROM_MAIL } = require('../config/mail.config');
 const Fournisseur = require('../models/Fournisseur.model');
+const nodemailer = require('nodemailer');
 
 // Create a new fournisseur
 async function createFournisseur(req, res) {
@@ -57,10 +59,40 @@ async function deleteFournisseur(req, res) {
     }
 }
 
+async function sendMail(req, res) {
+    const id = req.params.id;
+    const fournisseur = await Fournisseur.findById(id);
+
+    if (!fournisseur){
+        res.status(500).json({error:"an error occured"});
+    }
+    const transporter = nodemailer.createTransport(MAIL_CONFIG);
+
+    const mailOptions = {
+        from: FROM_MAIL,
+        to: fournisseur.email,
+        subject: req.body.subject,
+        html: req.body.message,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log(error);
+            res.send('Error sending email.');
+        } else {
+            console.log('Email sent: ' + info.response);
+            res.send('Email sent successfully.');
+        }
+    });
+
+
+}
+
 module.exports = {
     createFournisseur,
     getFournisseurs,
     getFournisseurById,
     updateFournisseur,
     deleteFournisseur,
+    sendMail,
 };
