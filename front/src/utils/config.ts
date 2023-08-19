@@ -1,5 +1,6 @@
-export const BASE_URL = "http://192.168.1.85:3000";
-export const APP_URL = "http://192.168.1.85:4200";
+const host = "http://172.20.10.3";
+export const BASE_URL = `${host}:3000`;
+export const APP_URL = `${host}:4200`;
 export const config = {
     headers: {
         'Content-Type': 'application/json',

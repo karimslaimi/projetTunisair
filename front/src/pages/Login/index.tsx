@@ -57,7 +57,7 @@ function Main() {
                             <a href="" className="flex items-center pt-5 -intro-x">
                                 <img
                                     alt="Midone Tailwind HTML Admin Template"
-                                    className="w-32"
+                                    className="w-36"
                                     src={logoUrl}
                                 />
                             </a>
