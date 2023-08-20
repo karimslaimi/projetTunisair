@@ -6,9 +6,10 @@ import Lucide from "../../../base-components/Lucide";
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
+    value:number,
 }
 
-function main({isOpen, onClose}: ModalProps) {
+function main({isOpen, onClose,value}: ModalProps) {
 
     return (
         <>
@@ -20,7 +21,8 @@ function main({isOpen, onClose}: ModalProps) {
                         <Lucide icon="CheckCircle" className="w-16 h-16 mx-auto mt-3 text-success"/>
                         <div className="mt-5 text-3xl">Voucher verified</div>
                         <div className="mt-2 text-slate-500">
-                            Voucher is eligible for consumption and it will marked as consumed in the database
+                            Voucher is eligible for consumption and it will marked as consumed in the database.<br/>
+                            The value of the voucher is {value} tnd
                         </div>
                     </div>
                     <div className="px-5 pb-8 text-center">

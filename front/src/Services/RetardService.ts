@@ -38,10 +38,22 @@ const affectContrat = async (delayId:string, contratId:string)=>{
     }
 }
 
+const getById = async (id: string) => {
+    if (!id) return;
+    let response;
+    try {
+        response = await api.get("/retard/get/" + id);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+    return response;
+}
 
 
 export default {
     addDelay,
     retardList,
     affectContrat,
+    getById,
 }

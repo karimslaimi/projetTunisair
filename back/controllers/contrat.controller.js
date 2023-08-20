@@ -31,7 +31,6 @@ async function createContrat(req, res) {
 async function getAllContrat(req,res){
     try{
         const contrats = await Contrat.find().populate("fournisseur","title").populate("articles").exec();
-        console.log(contrats);
         res.status(200).json(contrats);
 
     }catch(error){
@@ -61,7 +60,7 @@ async function deleteContrat(req,res){
 async function getById(req, res) {
     try {
         const contratId = req.params.id;
-        const contrat = await Contrat.findById(contratId);
+        const contrat = await Contrat.findById(contratId).populate("fournisseur").populate("articles");
         
         if (contrat) {
             res.status(200).json(contrat);

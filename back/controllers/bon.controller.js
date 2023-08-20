@@ -1,5 +1,7 @@
 // controllers/bonController.js
 const Bon = require('../models/Bon.model');
+const Retard = require("../models/Retard.model");
+
 
 
 const getbonByRetard = async (req, res) => {
@@ -29,6 +31,9 @@ const createBon = async (req, res) => {
     try {
         const newBon = new Bon(req.body);
         const savedBon = await newBon.save();
+        await Retard.findByIdAndUpdate(newBon.retard, {
+            $push: { bons: savedBon._id }
+        });
         res.status(201).json(savedBon);
     } catch (error) {
         res.status(500).json({ error: error.message });

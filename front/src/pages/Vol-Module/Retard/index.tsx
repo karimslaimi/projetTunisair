@@ -89,6 +89,22 @@ function Main() {
                         vertAlign: "middle",
                         print: false,
                         download: false,
+                    },                    {
+                        title: "Passangers",
+                        minWidth: 200,
+                        responsive: 0,
+                        field: "vol.nombre_passager",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
+                    },                    {
+                        title: "Vouchers",
+                        minWidth: 200,
+                        responsive: 0,
+                        field: "bonCount",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
                     },
                     {
                         title: "ACTIONS",

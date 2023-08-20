@@ -24,6 +24,7 @@ function main({isOpen, onClose, voucherId}: ModalProps) {
                 setVoucher(x);
                 setValue(APP_URL + "/voucher/verify/" + x._id);
             });
+            console.log(value);
         }
 
     }, [isOpen]);

@@ -44,6 +44,9 @@ function Main() {
         }
     }
 
+    const handleInvoiceClick=(id:string)=>{
+        navigate("/contract/invoice/"+id);
+    }
     const tableRef = createRef<HTMLDivElement>();
     const tabulator = useRef<Tabulator>();
     const [filter, setFilter] = useState({
@@ -146,11 +149,14 @@ function Main() {
                         formatter(cell) {
                             const a =
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
-                                                      <a class="flex items-center mr-3" href="javascript:;">
+                                                      <a class="edit flex items-center mr-3" href="javascript:;">
                                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
                                                       </a>
                                                       <a class="flex items-center text-danger" href="javascript:;">
                                                         <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
+                                                      </a>
+                                                      <a class="invoice flex items-center" href="javascript:;">
+                                                        <i data-lucide="file" class="w-4 h-4 mr-1"></i> Invoice
                                                       </a>
                                 </div>`);
 
@@ -161,16 +167,22 @@ function Main() {
 
                                 // Check if the clicked element is the 'Edit' link
                                 // @ts-ignore
-                                if (clickedElement.matches('.flex.items-center.mr-3')) {
+                                if (clickedElement.className.includes('edit')) {
                                     // @ts-ignore
                                     handleEdit(cell.getData()._id);
                                 }
 
                                 // Check if the clicked element is the 'Delete' link
                                 // @ts-ignore
-                                if (clickedElement.matches('.flex.items-center.text-danger')) {
+                                if (clickedElement.className.includes('text-danger')) {
                                     // @ts-ignore
                                     handleDelete(cell.getData()._id);
+                                }
+
+                                // @ts-ignore
+                                if (clickedElement.className.includes('invoice')) {
+                                    // @ts-ignore
+                                    handleInvoiceClick(cell.getData()._id);
                                 }
                                 // On click actions
                             });

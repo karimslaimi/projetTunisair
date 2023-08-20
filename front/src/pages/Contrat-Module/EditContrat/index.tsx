@@ -40,7 +40,7 @@ function main() {
         supplierService.supplierList().then(x=> setSuppliers(x)).catch(err=>alert("an error occured"));
 
     }, []);
-
+//fixme fix the articles and the supplier needs to be selected
 
     const schema = yup
         .object({

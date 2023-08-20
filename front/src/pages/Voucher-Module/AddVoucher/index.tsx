@@ -13,6 +13,7 @@ import TomSelect from "../../../base-components/TomSelect";
 import volService from "../../../Services/VolService";
 import supplierService from "../../../Services/SupplierService";
 import voucherService from "../../../Services/VoucherService";
+import retardService from "../../../Services/RetardService";
 
 function main() {
     const {idDelay} = useParams();
@@ -20,6 +21,8 @@ function main() {
     const [message, setMessage] = useState("");
     const [vols, setVols] = useState<any[]>([]);
     const [suppliers, setSuppliers] = useState<any[]>([]);
+    const [retard, setRetard] = useState<any>();
+    const [volId, setVolId] = useState<string>();
     useEffect(() => {
         volService.volList().then(x => setVols(x))
             .catch((error) => {
@@ -27,6 +30,13 @@ function main() {
                 console.log(error)
             });
         supplierService.supplierList().then(x => setSuppliers(x)).catch(err => alert("an error occured"));
+        retardService.getById(idDelay ?? '').then(x => {
+            if (x) {
+                setRetard(x.data);
+                setVolId(x.data.vol.num_vol);
+                setValue("vol",x.data.vol.num_vol);
+            }
+        }).catch(() => alert("an error occured"));
 
     }, []);
 
@@ -34,7 +44,7 @@ function main() {
         .object({
             nom: yup.string().required("Last Name is required"),
             prenom: yup.string().required("First Name is required"),
-            vol: yup.string().required("Flight is required"),
+            vol: yup.string().default(volId),
             fournisseur: yup.string().required("Supplier"),
             prix: yup.number().required("Price is required"),
             retard: yup.string().default(idDelay),
@@ -148,9 +158,9 @@ function main() {
                                 <FormLabel htmlFor="vol"
                                            className="flex flex-col w-full sm:flex-row">Flight
                                 </FormLabel>
-                                <TomSelect
+                                <TomSelect disabled
                                     id={"vol"}
-                                    value={getValues("vol")}
+                                    value={volId}
                                     onChange={(e) => setValue("vol", e)}
                                     placeholder="Select the flight"
                                     className={"w-full " + clsx({"border-danger": errors.vol})}

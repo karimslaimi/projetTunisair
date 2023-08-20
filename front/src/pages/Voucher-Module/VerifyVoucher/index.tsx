@@ -9,6 +9,7 @@ function main() {
     const {id} = useParams();
     const [voucher, setVoucher] = useState<any>();
     const [called, setCalled] = useState(false);
+    const [price, setPrice] = useState(0);
 
     let [isOpenOk, setIsOpenOk] = useState(false);
     let [isClosedOk, setIsClosedOk] = useState(true);
@@ -18,6 +19,7 @@ function main() {
         if (id) {
             voucherService.getById(id).then(x => {
                 setVoucher(x);
+                setPrice(x.prix);
                 setCalled(true);
             }).catch(() => alert("an error occured"));
 
@@ -39,7 +41,7 @@ function main() {
     }, [called]);
     return (
         <>
-            <SuccesVerifyModal isOpen={isOpenOk} onClose={() => {
+            <SuccesVerifyModal isOpen={isOpenOk} value={price} onClose={() => {
                 setIsOpenOk(false);
                 setIsClosedOk(true);
             }}/>

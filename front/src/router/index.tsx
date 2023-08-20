@@ -23,6 +23,8 @@ import Vouchers from "../pages/Voucher-Module/Vouchers";
 import AddVoucher from "../pages/Voucher-Module/AddVoucher";
 import EditVoucher from "../pages/Voucher-Module/EditVoucher";
 import VerifyVoucher from "../pages/Voucher-Module/VerifyVoucher";
+import Inovice from "../pages/Contrat-Module/Invoice";
+import Invoice from "../pages/Contrat-Module/Invoice";
 
 
 function Router() {
@@ -139,6 +141,10 @@ function Router() {
         {
             path: "/voucher/verify/:id",
             element: <VerifyVoucher/>
+        },
+        {
+            path: "/contract/invoice/:id",
+            element: <Invoice/>
         },
 
     ];

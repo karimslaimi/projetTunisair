@@ -1,4 +1,4 @@
-const host = "http://172.20.10.3";
+const host = "http://localhost";
 export const BASE_URL = `${host}:3000`;
 export const APP_URL = `${host}:4200`;
 export const config = {

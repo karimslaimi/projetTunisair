@@ -29,7 +29,7 @@ async function getAllRetards(req, res) {
 // Get a specific Retard by ID
 async function getRetardById(req, res) {
     try {
-        const retard = await Retard.findById(req.params.id);
+        const retard = await Retard.findById(req.params.id).populate("vol").exec();
         if (retard) {
             res.status(200).json(retard);
         } else {
