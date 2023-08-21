@@ -19,7 +19,7 @@ async function createRetard(req, res) {
 // Get all Retards
 async function getAllRetards(req, res) {
     try {
-        const retards = await Retard.find().populate("vol");
+        const retards = await Retard.find().populate("vol").populate("contrat");
         res.status(200).json(retards);
     } catch (error) {
         res.status(500).json({ error: error.message });

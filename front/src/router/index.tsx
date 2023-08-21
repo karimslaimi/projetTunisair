@@ -10,8 +10,6 @@ import Articles from "../pages/Article-Module/Articles";
 import AddArticle from "../pages/Article-Module/AddArticle";
 import EditArticle from "../pages/Article-Module/EditArticle";
 import Vols from "../pages/Vol-Module/Vols";
-import EditVol from "../pages/Vol-Module/EditVol";
-import AddVol from "../pages/Vol-Module/AddVol";
 import Retard from "../pages/Vol-Module/Retard";
 import Contrats from "../pages/Contrat-Module/Contrats";
 import AddContrat from "../pages/Contrat-Module/AddContrat";
@@ -23,7 +21,6 @@ import Vouchers from "../pages/Voucher-Module/Vouchers";
 import AddVoucher from "../pages/Voucher-Module/AddVoucher";
 import EditVoucher from "../pages/Voucher-Module/EditVoucher";
 import VerifyVoucher from "../pages/Voucher-Module/VerifyVoucher";
-import Inovice from "../pages/Contrat-Module/Invoice";
 import Invoice from "../pages/Contrat-Module/Invoice";
 
 
@@ -89,14 +86,6 @@ function Router() {
                 {
                     path: "/vols",
                     element: <Vols/>
-                },
-                {
-                    path: "/vols/add",
-                    element: <AddVol/>
-                },
-                {
-                    path: "/vols/edit/:id",
-                    element: <EditVol/>
                 },
                 //endregion
                 //region retard

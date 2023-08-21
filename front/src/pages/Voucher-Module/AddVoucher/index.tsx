@@ -91,7 +91,7 @@ function main() {
                 }
             }).catch((e) => {
                 showNotification();
-                setMessage(e.response.data.message);
+                setMessage(e.response.data.error);
                 console.log(e);
                 alert("an error occured");
             })
@@ -190,6 +190,7 @@ function main() {
                                            className="flex flex-col w-full sm:flex-row">Supplier
                                 </FormLabel>
                                 <TomSelect
+                                    disabled
                                     id={"fournisseur"}
                                     value={getValues("fournisseur")}
                                     onChange={(e) => setValue("fournisseur", e)}

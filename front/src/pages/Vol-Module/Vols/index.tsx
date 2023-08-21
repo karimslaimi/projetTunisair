@@ -81,7 +81,16 @@ function Main() {
 
                     // For HTML table
                     {
-                        title: "Numéro",
+                        title: "Company",
+                        minWidth: 200,
+                        responsive: 0,
+                        field: "compagnie",
+                        vertAlign: "middle",
+                        print: false,
+                        download: false,
+                    },
+                    {
+                        title: "Number",
                         minWidth: 200,
                         responsive: 0,
                         field: "num_vol",
@@ -118,7 +127,7 @@ function Main() {
                         print: false,
                         download: false,
                     }, {
-                        title: "Passager",
+                        title: "Passengers",
                         minWidth: 200,
                         responsive: 0,
                         field: "nombre_passager",
@@ -141,12 +150,7 @@ function Main() {
                                                       <a class="flex items-center text-pending mr-3" href="javascript:;">
                                                         <i data-lucide="alarm-minus" class="w-4 h-4 mr-1"></i> Delay
                                                       </a>
-                                                      <a class="flex items-center mr-3" href="javascript:;">
-                                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
-                                                      </a>
-                                                      <a class="flex items-center text-danger" href="javascript:;">
-                                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
-                                                      </a>
+                                                     
                                 </div>`);
 
                             a.addEventListener("click", function (e) {
@@ -154,28 +158,13 @@ function Main() {
                                 const clickedElement = e.target;
                                 if (!clickedElement) return;
                                 // @ts-ignore
-                                if (clickedElement.matches('.text-pending')){
+                                if (clickedElement.matches('.text-pending')) {
                                     // @ts-ignore
                                     setVolId(cell.getData()._id);
                                     setIsClosed(false);
                                     setIsOpen(true);
                                     return;
 
-                                }
-
-                                // @ts-ignore
-                                if (clickedElement.matches('.flex.items-center.mr-3')) {
-                                    // @ts-ignore
-                                    handleEdit(cell.getData()._id);
-                                    return;
-                                }
-
-
-                                // @ts-ignore
-                                if (clickedElement.matches('.flex.items-center.text-danger')) {
-                                    // @ts-ignore
-                                    handleDelete(cell.getData()._id);
-                                    return;
                                 }
 
 
@@ -352,10 +341,10 @@ function Main() {
             </div>
             {/* END: HTML Table Data */}
 
-            <RetardModal isOpen={isOpen} voldId={voldId}  onClose={()=> {
+            <RetardModal isOpen={isOpen} voldId={voldId} onClose={() => {
                 setIsOpen(false);
                 setIsClosed(true);
-            }} />
+            }}/>
         </>
     );
 }

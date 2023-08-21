@@ -7,19 +7,19 @@ const Retard = require("../models/Retard.model");
 const getbonByRetard = async (req, res) => {
     try {
         const retardId = req.params.retard_id;
-        const bons = await Bon.find({ retard: retardId }) .populate({
+        const bons = await Bon.find({ retard: retardId }).populate({
             path: "retard",
             populate: {
-              path: "vol",
-              select: "vol_num", 
+                path: "vol",
+                select: "vol_num",
             },
-          }).populate({
+        }).populate({
             path: "retard",
             populate: {
-              path: "contrat",
-              select: "title", 
+                path: "contrat",
+                select: "title",
             },
-          }).exec();
+        }).exec();
         return res.status(200).json(bons);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -30,6 +30,10 @@ const getbonByRetard = async (req, res) => {
 const createBon = async (req, res) => {
     try {
         const newBon = new Bon(req.body);
+        const exist = await Bon.find({ nom: newBon.nom, prenom: newBon.prenom, retard: newBon.retard });
+        if (exist.length > 0){
+            return res.status(409).json({error:"Voucher already Exist"});
+        }
         const savedBon = await newBon.save();
         await Retard.findByIdAndUpdate(newBon.retard, {
             $push: { bons: savedBon._id }
@@ -96,17 +100,17 @@ const deleteBonById = async (req, res) => {
     }
 };
 
-const consumeBon = async (req,res)=>{
-    try{
-        const id =req.params.id;
+const consumeBon = async (req, res) => {
+    try {
+        const id = req.params.id;
         if (!id) res.status(200).json(null);
         const bon = await Bon.findById(id);
         bon.consumed = true;
         const updatedBon = await Bon.findByIdAndUpdate(id, bon, { new: true });
         res.status(200).json(updatedBon);
 
-    }catch (error){
-        res.status.json({error:error.message});
+    } catch (error) {
+        res.status.json({ error: error.message });
     }
 }
 

@@ -8,12 +8,15 @@ const Vol = mongoose.model(
         origine: { type: String, required: true },
         destination: { type: String, required: true },
         nombre_passager: { type: Number, required: true },
-        h_depart: { type: String, required: true },
-        h_arrive: { type: String, required: true },
+        compagnie: { type: String, requuired: true },
         retards: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Retard'
-          }]
+        }],
+        passagers: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Passager'
+        }],
     })
 );
 
