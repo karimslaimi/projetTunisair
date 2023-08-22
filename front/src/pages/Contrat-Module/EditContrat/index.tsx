@@ -35,12 +35,13 @@ function main() {
         contratService.getById(id??'').then(x=>{
             if(x){
                 reset(x.data);
+                setValue("fournisseur",x.data.fournisseur._id);
+                setValue("articles",x.data.articles.map((s:any)=>s.Article._id));
             }
         });
         supplierService.supplierList().then(x=> setSuppliers(x)).catch(err=>alert("an error occured"));
 
     }, []);
-//fixme fix the articles and the supplier needs to be selected
 
     const schema = yup
         .object({
@@ -116,6 +117,7 @@ function main() {
 
     useEffect(() => {
         setSelectedArticles(getValues("articles"))
+        console.log(selectedArticles);
     }, [getValues("articles")]);
 
     return (

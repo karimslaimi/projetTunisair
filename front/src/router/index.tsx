@@ -22,6 +22,7 @@ import AddVoucher from "../pages/Voucher-Module/AddVoucher";
 import EditVoucher from "../pages/Voucher-Module/EditVoucher";
 import VerifyVoucher from "../pages/Voucher-Module/VerifyVoucher";
 import Invoice from "../pages/Contrat-Module/Invoice";
+import Passengers from "../pages/Vol-Module/Passengers";
 
 
 function Router() {
@@ -86,6 +87,10 @@ function Router() {
                 {
                     path: "/vols",
                     element: <Vols/>
+                },
+                {
+                    path: "/vols/passengers/:id",
+                    element: <Passengers/>
                 },
                 //endregion
                 //region retard

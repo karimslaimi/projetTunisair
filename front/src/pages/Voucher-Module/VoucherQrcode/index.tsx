@@ -43,10 +43,15 @@ function main({isOpen, onClose, voucherId}: ModalProps) {
                         </h2>
 
                     </Dialog.Title>
-                    <Dialog.Description className="grid grid-cols-12 gap-4 gap-y-3">
+                    <Dialog.Description className="grid grid-cols-12  gap-y-3">
 
-                        <div className={" ml-auto col-span-12 sm:col-span-6"}>
-                            <div className={"flex justify-center items-center h-64"}>
+                        <div className={" col-span-4 sm:col-span-6"}>
+                            <div className={"flex justify-start items-center"}>
+                                <span>{voucher ? voucher.nom + " " + voucher.prenom : ''}</span>
+                            </div>
+                        </div>
+                            <div className={"  col-span-8 sm:col-span-6"}>
+                            <div className={"flex justify-end items-center h-64"}>
                                 <QRCode value={value} size={size}/>
                             </div>
                             <div className={"flex justify-center items-center mt-2 no-print"}>

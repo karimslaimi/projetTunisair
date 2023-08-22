@@ -20,8 +20,9 @@ const getbonByRetard = async (req, res) => {
                 select: "title",
             },
         }).exec();
-        return res.status(200).json(bons);
+        res.status(200).json(bons);
     } catch (error) {
+        console.error(error.stack);
         res.status(500).json({ error: error.message });
     }
 }
@@ -31,7 +32,7 @@ const createBon = async (req, res) => {
     try {
         const newBon = new Bon(req.body);
         const exist = await Bon.find({ nom: newBon.nom, prenom: newBon.prenom, retard: newBon.retard });
-        if (exist.length > 0){
+        if (exist && exist.length > 0){
             return res.status(409).json({error:"Voucher already Exist"});
         }
         const savedBon = await newBon.save();

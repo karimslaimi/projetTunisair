@@ -11,4 +11,6 @@ router.get('/get/:id',isAuthenticated, checkRole("ADMIN"), volController.getVolB
 router.put('/update/:id',isAuthenticated, checkRole("ADMIN"), volController.updateVol);
 router.delete('/delete/:id',isAuthenticated, checkRole("ADMIN"), volController.deleteVol);
 
+router.get('/getPass/:id',isAuthenticated, checkRole("ADMIN"), volController.getPassangersByVol);
+
 module.exports = router;

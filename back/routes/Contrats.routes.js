@@ -12,4 +12,7 @@ router.put('/update/:id',isAuthenticated, checkRole("ADMIN"), contratController.
 router.delete('/delete/:id',isAuthenticated, checkRole("ADMIN"), contratController.deleteContrat);
 
 
+
+router.get('/getByRetard/:id', contratController.getContratByRetard);
+
 module.exports = router;

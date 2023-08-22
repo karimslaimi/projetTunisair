@@ -14,27 +14,28 @@ import volService from "../../../Services/VolService";
 import supplierService from "../../../Services/SupplierService";
 import voucherService from "../../../Services/VoucherService";
 import retardService from "../../../Services/RetardService";
+import contratService from "../../../Services/ContratService";
 
 function main() {
     const {idDelay} = useParams();
     const navigate = useNavigate();
     const [message, setMessage] = useState("");
-    const [vols, setVols] = useState<any[]>([]);
-    const [suppliers, setSuppliers] = useState<any[]>([]);
-    const [retard, setRetard] = useState<any>();
+
+    const [contrat, setContrat] = useState<any>();
     const [volId, setVolId] = useState<string>();
+    const [supplier, setSupplier] = useState<string>();
     useEffect(() => {
-        volService.volList().then(x => setVols(x))
-            .catch((error) => {
-                alert("an error occured");
-                console.log(error)
-            });
-        supplierService.supplierList().then(x => setSuppliers(x)).catch(err => alert("an error occured"));
+
+        contratService.getByRetard(idDelay ?? '').then(x => {
+            setSupplier(x.data.fournisseur.title);
+            setContrat(x.data);
+            setValue("prix",x.data.prix_menu);
+            setValue("fournisseur",x.data.fournisseur.title);
+        }).catch(() => alert("an error occured"));
         retardService.getById(idDelay ?? '').then(x => {
             if (x) {
-                setRetard(x.data);
                 setVolId(x.data.vol.num_vol);
-                setValue("vol",x.data.vol.num_vol);
+                setValue("vol", x.data.vol.num_vol);
             }
         }).catch(() => alert("an error occured"));
 
@@ -45,8 +46,8 @@ function main() {
             nom: yup.string().required("Last Name is required"),
             prenom: yup.string().required("First Name is required"),
             vol: yup.string().default(volId),
-            fournisseur: yup.string().required("Supplier"),
-            prix: yup.number().required("Price is required"),
+            fournisseur: yup.string().default(supplier),
+            prix: yup.number().default(contrat?.prix_menu),
             retard: yup.string().default(idDelay),
         })
         .required();
@@ -68,7 +69,6 @@ function main() {
     const formSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
         event.preventDefault();
         const result = await trigger();
-        debugger;
         if (!result) {
             let failedEl = showNotification();
             Toastify({
@@ -158,24 +158,13 @@ function main() {
                                 <FormLabel htmlFor="vol"
                                            className="flex flex-col w-full sm:flex-row">Flight
                                 </FormLabel>
-                                <TomSelect disabled
-                                    id={"vol"}
-                                    value={volId}
-                                    onChange={(e) => setValue("vol", e)}
-                                    placeholder="Select the flight"
-                                    className={"w-full " + clsx({"border-danger": errors.vol})}
-                                >
-                                    <option>Select Flight</option>
-                                    {vols.map(option => {
-                                        return (
-                                            < option
-                                                key={option.num_vol}
-                                                value={option.num_vol}>
-                                                {option.num_vol}
-                                            </option>
-                                        )
-                                    })}
-                                </TomSelect>
+                                <FormInput disabled
+                                           id={"vol"}
+                                           value={volId}
+                                           onChange={(e) => setValue("vol", e)}
+                                           placeholder="Select the flight"
+                                           className={"w-full " + clsx({"border-danger": errors.vol})}
+                                />
                                 {errors.vol && (
                                     <div className="mt-2 text-danger">
                                         {typeof errors.vol.message === "string" &&
@@ -189,25 +178,14 @@ function main() {
                                 <FormLabel htmlFor="fournisseur"
                                            className="flex flex-col w-full sm:flex-row">Supplier
                                 </FormLabel>
-                                <TomSelect
+                                <FormInput
                                     disabled
                                     id={"fournisseur"}
-                                    value={getValues("fournisseur")}
+                                    value={supplier}
                                     onChange={(e) => setValue("fournisseur", e)}
-                                    placeholder="Select the flight"
+                                    placeholder="Select the supplier"
                                     className={"w-full " + clsx({"border-danger": errors.fournisseur})}
-                                >
-                                    <option>Select Suppliers</option>
-                                    {suppliers.map(option => {
-                                        return (
-                                            < option
-                                                key={option.title}
-                                                value={option.title}>
-                                                {option.title}
-                                            </option>
-                                        )
-                                    })}
-                                </TomSelect>
+                                />
                                 {errors.fournisseur && (
                                     <div className="mt-2 text-danger">
                                         {typeof errors.fournisseur.message === "string" &&
@@ -220,8 +198,9 @@ function main() {
                                 <FormLabel htmlFor="price"
                                            className="flex flex-col w-full sm:flex-row">Price
                                 </FormLabel>
-                                <FormInput
-                                    {...register("prix")}
+                                <FormInput disabled
+                                    value={contrat?.prix_menu}
+                                    onChange={(e) => setValue("prix", e)}
                                     id="price"
                                     type="number"
                                     placeholder="Enter the price"
@@ -259,7 +238,7 @@ function main() {
             >
                 <Lucide icon="XCircle" className="text-danger"/>
                 <div className="ml-4 mr-4">
-                    <div className="font-medium">Editing an article failed!</div>
+                    <div className="font-medium">Adding a voucher failed!</div>
                     <div className="mt-1 text-slate-500">
                         Please check the fileld form.
                     </div>

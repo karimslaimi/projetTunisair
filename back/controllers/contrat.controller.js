@@ -2,18 +2,22 @@ const Article = require("../models/Article.model"); // Make sure to provide the 
 const Contrat = require("../models/Contrat.model");
 const ArticleContrat = require("../models/ArticleContrat.model");
 const Fournisseur = require("../models/Fournisseur.model");
+const Retard = require("../models/Retard.model");
 
 
 async function createContrat(req, res) {
     try {
         const contratData = req.body;
+        const articles = contratData.articles;
+        delete contratData.articles;
+
         const fournisseurId = contratData.fournisseur; 
         const fournisseur = await Fournisseur.findById(fournisseurId);
         contratData.fournisseur = fournisseur._id;
         const savedContrat = await Contrat.create(contratData);
 
         // No need to fetch the entire Article, just use the ID directly
-        const articleLinks = contratData.articles.map(articleId => ({
+        const articleLinks = articles.map(articleId => ({
             Article: articleId, // Note the capital "A" here
             contrat: savedContrat._id
         }));
@@ -60,7 +64,12 @@ async function deleteContrat(req,res){
 async function getById(req, res) {
     try {
         const contratId = req.params.id;
-        const contrat = await Contrat.findById(contratId).populate("fournisseur").populate("articles");
+        const contrat = await Contrat.findById(contratId).populate("fournisseur").populate({
+            path: "articles",
+            populate: {
+                path: "Article",
+            },
+        }).exec();
         
         if (contrat) {
             res.status(200).json(contrat);
@@ -74,23 +83,32 @@ async function getById(req, res) {
 
 async function updateContrat(req,res){
     const contratId = req.params.id;
+    const contratData = req.body;
+    const articles = contratData.articles;
+    delete contratData.articles;
 
     try {
-        // Update the Contrat with all fields from the request body
-        const updatedContrat = await Contrat.findByIdAndUpdate(contratId, req.body, { new: true });
+        const updatedContrat = await Contrat.findByIdAndUpdate(contratId, contratData, { new: true });
 
         if (!updatedContrat) {
             return res.status(404).json({ message: 'Contrat not found' });
         }
+
+        // Delete existing ArticleContrat associations for the contrat
         await ArticleContrat.deleteMany({ contrat: contratId });
 
-        // b. Create new associations
-        const newArticleLinks = updatedContrat.articles.map(articleId => ({
+        // Create new ArticleContrat associations for the contrat
+        const newArticleLinks = articles.map(articleId => ({
             Article: articleId,
             contrat: contratId
         }));
-        
-        await ArticleContrat.insertMany(newArticleLinks);
+
+        const savedArticles = await ArticleContrat.insertMany(newArticleLinks);
+
+        // Update the updatedContrat's articles field with the savedArticles
+        updatedContrat.articles = savedArticles.map(article => article._id); // Assuming _id is the ObjectId
+
+       await Contrat.findByIdAndUpdate(contratId, updatedContrat);
 
         // If you're updating articles through ArticleContrat, do so here...
 
@@ -100,10 +118,29 @@ async function updateContrat(req,res){
     }
 
 }
+
+
+async function getContratByRetard(req,res){
+    const id = req.params.id;
+    const retard = await Retard.findById(id)
+    .populate({
+      path: 'contrat',
+      populate: {
+        path: 'fournisseur',
+        model: 'Fournisseur', // Replace with the name of your Supplier model
+      },
+    });
+    const contrat = retard.contrat;
+    if(!contrat){
+        return res.status(404).json({error:'Contrat not found'});
+    }
+    res.json(contrat);
+}
 module.exports = {
     createContrat,
     getAllContrat,
     deleteContrat,
     updateContrat,
-    getById
+    getById,
+    getContratByRetard
 }

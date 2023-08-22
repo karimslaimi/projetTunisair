@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const Vol = mongoose.model(
-    "Vol",
-    new mongoose.Schema({
+const volSchema =  new Schema({
         num_vol: { type: String, required: true },
         date_vol: { type: Date, required: true },
         origine: { type: String, required: true },
@@ -17,7 +16,16 @@ const Vol = mongoose.model(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Passager'
         }],
-    })
-);
+    });
 
+
+volSchema.virtual('passagerCount').get(function () {
+    return this.passagers?.length;
+});
+
+volSchema.set('toJSON', { virtuals: true });
+const Vol = mongoose.model(
+    "Vol",
+   volSchema
+);
 module.exports = Vol;

@@ -29,25 +29,8 @@ function Main() {
     }
 
     let a = refreshTab().then((res) => res);
-    const handleDelete = (id: string) => {
-        let res = volService.deletevol(id).then(async (res) => {
-            if (res) {
-                await refreshTab();
-                alert("vol deleted");
-            }
-            return res;
-        }).catch((e) => {
-            console.log(e);
-            alert("error occured");
-        })
-
-    }
-
-    const handleEdit = (id: string) => {
-        console.log(id);
-        if (id) {
-            navigate("/vols/edit/" + id);
-        }
+    const handlePassengers = (id: string) => {
+        navigate("passengers/" + id);
     }
 
     const tableRef = createRef<HTMLDivElement>();
@@ -149,6 +132,9 @@ function Main() {
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
                                                       <a class="flex items-center text-pending mr-3" href="javascript:;">
                                                         <i data-lucide="alarm-minus" class="w-4 h-4 mr-1"></i> Delay
+                                                      </a> 
+                                                      <a class="passengers flex items-center  mr-3" href="javascript:;">
+                                                        <i data-lucide="user" class="w-4 h-4 mr-1"></i> Passengers
                                                       </a>
                                                      
                                 </div>`);
@@ -165,6 +151,11 @@ function Main() {
                                     setIsOpen(true);
                                     return;
 
+                                }
+                                // @ts-ignore
+                                if (clickedElement.className.includes("passengers")) {
+                                    // @ts-ignore
+                                    handlePassengers(cell.getData()._id);
                                 }
 
 

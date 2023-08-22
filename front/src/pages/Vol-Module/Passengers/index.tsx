@@ -1,26 +1,21 @@
 import {useNavigate, useParams} from "react-router-dom";
-import voucherService from "../../../Services/VoucherService";
 import {createRef, useRef, useState} from "react";
 import {TabulatorFull as Tabulator} from "tabulator-tables";
-import {stringToHTML} from "../../../utils/helper";
 import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
-import {DateTime} from "luxon";
-import VoucherQrcode from "../VoucherQrcode";
+import volService from "../../../Services/VolService";
 
 
 function Main() {
     let navigate = useNavigate();
     const {id} = useParams();
-    let vouchers: any[] = [];
-    let [isOpen, setIsOpen] = useState(false);
-    let [isClosed, setIsClosed] = useState(true);
-    let [voucherId, setVoucherId] = useState('');
+    let passengers: any[] = [];
+
 
     const refreshTab = async () => {
-        voucherService.voucherList(id ?? "").then((x: any) => {
-            vouchers = x;
+        volService.getPassengers(id ?? "").then((x: any) => {
+            passengers = x;
             initTabulator();
             reInitOnResizeWindow();
 
@@ -31,38 +26,14 @@ function Main() {
     }
 
     let a = refreshTab().then((res) => res);
-    const handleDelete = (id: string) => {
-        let res = voucherService.deleteVoucher(id).then(async (res) => {
-            if (res) {
-                await refreshTab();
-                alert("Voucher deleted");
-            }
-            return res;
-        }).catch((e) => {
-            console.log(e);
-            alert("error occured");
-        })
 
-    }
 
-    const handleEdit = (idVoucher: string) => {
-        console.log(id);
-        if (id) {
-            navigate("/voucher/" + id + "/edit/" + idVoucher);
-        }
-    }
 
-    const handleQrCode = (idVoucher: string) => {
-        if (!idVoucher) return;
-        setVoucherId(idVoucher);
-        setIsClosed(false);
-        setIsOpen(true);
-    }
 
     const tableRef = createRef<HTMLDivElement>();
     const tabulator = useRef<Tabulator>();
     const [filter, setFilter] = useState({
-        field: "title",
+        field: "name",
         type: "like",
         value: "",
     });
@@ -70,7 +41,7 @@ function Main() {
     const initTabulator = () => {
         if (tableRef.current) {
             tabulator.current = new Tabulator(tableRef.current, {
-                data: vouchers,
+                data: passengers,
                 pagination: true,
                 paginationSize: 10,
                 paginationSizeSelector: [10, 20, 30, 40],
@@ -90,129 +61,25 @@ function Main() {
 
                     // For HTML table
                     {
-                        title: "First Name",
+                        title: "Name",
                         minWidth: 180,
                         responsive: 0,
-                        field: "prenom",
+                        field: "name",
                         vertAlign: "middle",
                         print: false,
                         download: false,
                     },
                     {
-                        title: "LastName",
-                        minWidth: 180,
-                        responsive: 0,
-                        field: "nom",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                    },
-                    {
-                        title: "Supplier",
-                        minWidth: 180,
-                        responsive: 0,
-                        field: "fournisseur",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                    }, {
                         title: "Flight",
                         minWidth: 180,
                         responsive: 0,
-                        field: "vol",
+                        field: "vol.num_vol",
                         vertAlign: "middle",
                         print: false,
                         download: false,
-                    }, {
-                        title: "Contract",
-                        minWidth: 180,
-                        responsive: 0,
-                        field: "retard.contrat.title",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                    },
-                    {
-                        title: "Price",
-                        minWidth: 150,
-                        responsive: 0,
-                        field: "prix",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                    },
-                    {
-                        title: "Date",
-                        minWidth: 160,
-                        responsive: 0,
-                        field: "date",
-                        vertAlign: "middle",
-                        formatter: cell => {
-                            const dateValue = cell.getValue();
-                            if (dateValue) {
-                                return DateTime.fromISO(dateValue).toFormat('dd/MM/yyyy');
-                            }
-                            return '';
-                        }
-                    },
-                    {
-                        title: "STATUS",
-                        minWidth: 130,
-                        field: "consumed",
-                        hozAlign: "center",
-                        headerHozAlign: "center",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                        formatter(cell) {
-                            const response: any = cell.getData();
-                            return `<div class="flex items-center lg:justify-center ${
-                                !response.consumed ? "text-success" : "text-danger"
-                            }">
-                            <i data-lucide=${!response.consumed ? "check-square" : "x-circle"} class="w-4 h-4 mr-2"></i> ${
-                                !response.consumed ? "Available" : "Consumed"
-                            }
-                          </div>`;
-                        },
-                    },
-                    {
-                        title: "ACTIONS",
-                        minWidth: 210,
-                        field: "actions",
-                        responsive: 1,
-                        hozAlign: "center",
-                        headerHozAlign: "center",
-                        vertAlign: "middle",
-                        print: false,
-                        download: false,
-                        formatter(cell) {
-                            const a =
-                                stringToHTML(`<div class="flex lg:justify-center items-center">
-                                                     
-                                                      <a class="qrcode flex items-center text-blue-950 mr-3" href="javascript:;">
-                                                        <i data-lucide="qr-code" class="w-4 h-4 mr-1"></i> QRcode
-                                                      </a> 
-                                                      <a class="print flex items-center text-blue-950 mr-3" href="javascript:;">
-                                                        <i data-lucide="printer" class="w-4 h-4 mr-1"></i> Print
-                                                      </a>
-                                </div>`);
 
-                            a.addEventListener("click", function (e) {
-
-                                const clickedElement = e.target;
-                                if (!clickedElement) return;
-
-
-                                // @ts-ignore
-                                if (clickedElement.className.includes('qrcode')) {
-                                    // @ts-ignore
-                                    handleQrCode(cell.getData()._id);
-                                }
-                                // On click actions
-                            });
-                            return a;
-                        },
                     },
+
                 ],
             });
         }
@@ -270,11 +137,9 @@ function Main() {
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
-                <h2 className="mr-auto text-lg font-medium">Vouchers</h2>
+                <h2 className="mr-auto text-lg font-medium">Passengers</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
-                    <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
-                        Add Voucher
-                    </Button>
+
 
                 </div>
             </div>
@@ -304,9 +169,8 @@ function Main() {
                                 }}
                                 className="w-full mt-2 2xl:w-full sm:mt-0 sm:w-auto"
                             >
-                                <option value="prenom">First Name</option>
-                                <option value="nom">Last Name</option>
-                                <option value="retard.vol.number">Flight</option>
+                                <option value="name">Name</option>
+                                <option value="vol.num_vol">Flight</option>
                             </FormSelect>
                         </div>
                         <div className="items-center mt-2 sm:flex sm:mr-4 xl:mt-0">
@@ -379,10 +243,7 @@ function Main() {
                 </div>
             </div>
             {/* END: HTML Table Data */}
-            <VoucherQrcode isOpen={isOpen} voucherId={voucherId} onClose={() => {
-                setIsOpen(false);
-                setIsClosed(true);
-            }}/>
+
         </>
     );
 }

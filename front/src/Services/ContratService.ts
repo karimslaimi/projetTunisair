@@ -57,6 +57,17 @@ const updateContrat = async (id: string, data: any) => {
     }
     return response;
 }
+const getByRetard = async (id:string)=>{
+    if(!id) return;
+    let response:any;
+    try{
+        response = await api.get("/contrat/getByRetard/"+id);
+    }catch (error){
+        console.log(error);
+        throw error;
+    }
+    return response;
+}
 
 export default {
     contratList,
@@ -64,4 +75,5 @@ export default {
     addContrat,
     updateContrat,
     deleteContrat,
+    getByRetard
 }

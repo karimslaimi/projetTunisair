@@ -1,5 +1,6 @@
 const { MAIL_CONFIG, FROM_MAIL } = require('../config/mail.config');
 const Fournisseur = require('../models/Fournisseur.model');
+const Retard = require('../models/Retard.model');
 const nodemailer = require('nodemailer');
 
 // Create a new fournisseur
@@ -87,6 +88,8 @@ async function sendMail(req, res) {
 
 
 }
+
+
 
 module.exports = {
     createFournisseur,

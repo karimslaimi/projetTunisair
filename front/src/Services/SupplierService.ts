@@ -73,6 +73,8 @@ const sendMail = async (id:string, subject:string,message:string)=>{
     return response;
 }
 
+
+
 export default {
     supplierList,
     addSupplier,

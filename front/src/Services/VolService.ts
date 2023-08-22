@@ -60,11 +60,23 @@ const getById = async (id: string) => {
     return response;
 }
 
+const getPassengers = async (id:string)=>{
+    let response;
+    try {
+        response = await api.get("/vol/getPass/"+id);
+        return response.data;
+    } catch (error: any) {
+        console.log(error.response.data.message);
+        throw error;
+    }
+}
+
 export default {
     volList,
     addvol,
     deletevol,
     updatevol,
     getById,
+    getPassengers,
 }
 

@@ -10,7 +10,7 @@ const RetardSchema = new Schema({
 
 
 RetardSchema.virtual('bonCount').get(function () {
-    return this.bons.length;
+    return this.bons?.length;
 });
 
 RetardSchema.set('toJSON', { virtuals: true });

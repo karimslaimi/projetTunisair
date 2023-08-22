@@ -1,4 +1,5 @@
 const Vol = require('../models/Vol.model');
+const Passager = require('../models/Passager.model');
 
 // Create a new vol
 async function createVol(req, res) {
@@ -72,10 +73,21 @@ async function deleteVol(req, res) {
     }
 }
 
+async function getPassangersByVol(req,res){
+    try{
+        const volId = req.params.id;
+        const listP = await Passager.find({vol:volId}).populate("vol");
+        res.status(200).json(listP);
+    }catch(error){
+        res.status(500).json({error: "Error occured"});
+    }
+}
+
 module.exports = {
     createVol,
     getAllVols,
     getVolById,
     updateVol,
     deleteVol,
+    getPassangersByVol,
 };
