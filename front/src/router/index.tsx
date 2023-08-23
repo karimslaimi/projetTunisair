@@ -23,6 +23,7 @@ import EditVoucher from "../pages/Voucher-Module/EditVoucher";
 import VerifyVoucher from "../pages/Voucher-Module/VerifyVoucher";
 import Invoice from "../pages/Contrat-Module/Invoice";
 import Passengers from "../pages/Vol-Module/Passengers";
+import VoucherDetail from "../pages/Voucher-Module/VoucherDetail";
 
 
 function Router() {
@@ -113,7 +114,6 @@ function Router() {
                     element: <EditContrat/>
                 },
                 //endregion
-
                 //region voucher
                 {
                     path: "/voucher/:id",
@@ -128,9 +128,14 @@ function Router() {
                     element: <EditVoucher/>
                 },
 
+
                 //endregion
 
             ]
+        },
+        {
+            path: "/voucher/detail/:id",
+            element: <VoucherDetail/>
         },
         {
             path: "/voucher/verify/:id",

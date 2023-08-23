@@ -72,6 +72,18 @@ const consumeVoucher = async (id: string) => {
     return response;
 }
 
+const getVoucherDetail = async (id: string) => {
+    if (!id) return;
+    let response: any;
+    try {
+        response = await api.get("/bon/getDetail/" + id);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+    return response;
+}
+
 export default {
     createVoucher,
     voucherList,
@@ -79,4 +91,5 @@ export default {
     updateVoucher,
     getById,
     consumeVoucher,
+    getVoucherDetail,
 }

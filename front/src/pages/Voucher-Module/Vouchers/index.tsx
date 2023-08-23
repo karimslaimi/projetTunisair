@@ -59,6 +59,9 @@ function Main() {
         setIsOpen(true);
     }
 
+    const handlePrint = (id: string) => {
+        window.open("/voucher/detail/" + id, "_blank");
+    }
     const tableRef = createRef<HTMLDivElement>();
     const tabulator = useRef<Tabulator>();
     const [filter, setFilter] = useState({
@@ -207,6 +210,11 @@ function Main() {
                                 if (clickedElement.className.includes('qrcode')) {
                                     // @ts-ignore
                                     handleQrCode(cell.getData()._id);
+                                }
+                                // @ts-ignore
+                                if (clickedElement.className.includes('print')) {
+                                    // @ts-ignore
+                                    handlePrint(cell.getData()._id);
                                 }
                                 // On click actions
                             });

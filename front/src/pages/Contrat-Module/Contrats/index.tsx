@@ -45,7 +45,7 @@ function Main() {
     }
 
     const handleInvoiceClick=(id:string)=>{
-        navigate("/contract/invoice/"+id);
+        window.open("/contract/invoice/" + id, "_blank");
     }
     const tableRef = createRef<HTMLDivElement>();
     const tabulator = useRef<Tabulator>();

@@ -11,12 +11,10 @@ export interface Menu {
 }
 
 export interface SideMenuState {
-    role: string;
     menu: Array<Menu | "divider">;
 }
 
 const initialState: SideMenuState = {
-    role: "admin",
     menu: [
         {
             icon: "Activity",

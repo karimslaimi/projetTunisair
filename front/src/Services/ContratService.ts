@@ -37,7 +37,7 @@ const deleteContrat = async(id:string)=>{
 
 const getById = async (id: string) => {
     if (!id) return;
-    let response;
+    let response: any;
     try {
         response = await api.get("contrat/get/" + id);
     } catch (error) {

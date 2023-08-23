@@ -10,6 +10,7 @@ router.get('/getAll',isAuthenticated, checkRole("ADMIN"),  bonController.getAllB
 router.put('/update/:id', isAuthenticated, checkRole("ADMIN"), bonController.updateBonById);
 router.delete('/delete/:id', isAuthenticated, checkRole("ADMIN"), bonController.deleteBonById);
 router.get('/byretard/:retard_id',isAuthenticated, checkRole("ADMIN"),  bonController.getbonByRetard);
+router.get('/getDetail/:id', bonController.getBonDetail);
 
 router.get('/get/:id', bonController.getBonById);
 router.put("/consume/:id", bonController.consumeBon);

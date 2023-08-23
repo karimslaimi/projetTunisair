@@ -7,8 +7,8 @@ const bonSchema = new mongoose.Schema({
     fournisseur: { type: String, required: true },
     prix: { type: Number, required: true },
     date: { type: Date, default: Date.now },
-    retard: { type: mongoose.Schema.Types.ObjectId, ref: 'Retard' },
     consumed : {type: Boolean, default: false},
+    retard: { type: mongoose.Schema.Types.ObjectId, ref: 'Retard' },
 });
 
 module.exports = mongoose.model('Bon', bonSchema);

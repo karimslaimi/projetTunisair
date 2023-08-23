@@ -1,25 +1,36 @@
-import {useEffect, useState} from "react";
-import contratService from "../../../Services/ContratService";
+import React, {useEffect, useState} from "react";
 import Button from "../../../base-components/Button";
 import {DateTime} from "luxon";
 import Table from "../../../base-components/Table";
 import {useParams} from "react-router-dom";
+import voucherService from "../../../Services/VoucherService";
+import QRCode from "qrcode.react";
+import {APP_URL} from "../../../utils/config";
 
 
 function Main() {
     const {id} = useParams();
     const [contrat, setContrat] = useState<any>();
     const [articles, setArticles] = useState<string[]>([]);
+    const [voucher, setVoucher] = useState<any>();
+
+    const size = 256;
+    const [value, setValue] = useState("");
+
     useEffect(() => {
-        contratService.getById(id ?? '').then(x => {
-            const articleTitles = x.data.articles.map((item: any) => item.Article.title);
+        voucherService.getVoucherDetail(id ?? '').then(x => {
+            const cont = x.data.retard.contrat;
+            debugger;
+            const articleTitles = cont.articles.map((item: any) => item.Article.title);
             setArticles(articleTitles)
-            setContrat(x.data);
+            setContrat(cont);
+            setVoucher(x.data);
+            setValue(APP_URL + "/voucher/verify/" + x.data._id);
 
         }).catch(() => alert("an error occured"));
     }, [id]);
 
-    return contrat && articles ? (
+    return voucher ? (
         <>
 
             {/* BEGIN: Invoice */}
@@ -34,7 +45,7 @@ function Main() {
                 </div>
                 <div className="text-center border-b border-slate-200/60 dark:border-darkmode-400 sm:text-left">
                     <div className="px-5 py-7 sm:px-20 sm:py-16">
-                        <div className="text-3xl font-semibold text-primary">INVOICE</div>
+                        <div className="text-3xl font-semibold text-primary">Voucher</div>
                         <div className="mt-2">
                             Contract: <span className="font-medium">{contrat.title}</span>
                         </div>
@@ -42,19 +53,19 @@ function Main() {
                     </div>
                     <div className="flex flex-col px-5 pt-8 pb-8 lg:flex-row sm:px-20 sm:pb-16">
                         <div>
-                            <div className="text-base text-slate-500">Supplier Details</div>
+                            <div className="text-base text-slate-500">Voucher Details</div>
                             <div className="mt-2 text-lg font-medium text-primary">
-                                {contrat.fournisseur.title}
+                                {voucher.nom + " " + voucher.prenom}
                             </div>
-                            <div className="mt-1"> {contrat.fournisseur.email}</div>
+                            <div className="mt-1"> {voucher.prix} tnd</div>
 
                         </div>
                         <div className="mt-10 lg:text-right lg:mt-0 lg:ml-auto">
-                            <div className="text-base text-slate-500">Payment to</div>
+                            <div className="text-base text-slate-500">Voucher to</div>
                             <div className="mt-2 text-lg font-medium text-primary">
-                                {contrat.fournisseur.title}
+                                {voucher.nom + " " + voucher.prenom}
                             </div>
-                            <div className="mt-1">{contrat.fournisseur.email}</div>
+                            <div className="mt-1">Flight: {voucher.vol}</div>
                         </div>
                     </div>
                 </div>
@@ -66,13 +77,16 @@ function Main() {
                                     <Table.Th className="border-b-2 dark:border-darkmode-400 whitespace-nowrap">
                                         DESCRIPTION
                                     </Table.Th>
-                                    <Table.Th className="text-right border-b-2 dark:border-darkmode-400 whitespace-nowrap">
+                                    <Table.Th
+                                        className="text-right border-b-2 dark:border-darkmode-400 whitespace-nowrap">
                                         QTY
                                     </Table.Th>
-                                    <Table.Th className="text-right border-b-2 dark:border-darkmode-400 whitespace-nowrap">
+                                    <Table.Th
+                                        className="text-right border-b-2 dark:border-darkmode-400 whitespace-nowrap">
                                         PRICE
                                     </Table.Th>
-                                    <Table.Th className="text-right border-b-2 dark:border-darkmode-400 whitespace-nowrap">
+                                    <Table.Th
+                                        className="text-right border-b-2 dark:border-darkmode-400 whitespace-nowrap">
                                         SUBTOTAL
                                     </Table.Th>
                                 </Table.Tr>
@@ -82,22 +96,23 @@ function Main() {
 
                                 {articles.map((article) => (
 
-                                <Table.Tr>
-                                    <Table.Td className="border-b dark:border-darkmode-400">
-                                        <div className="font-medium whitespace-nowrap">
-                                            {article}
-                                        </div>
-                                    </Table.Td>
-                                    <Table.Td className="w-32 text-right border-b dark:border-darkmode-400">
-                                        -
-                                    </Table.Td>
-                                    <Table.Td className="w-32 text-right border-b dark:border-darkmode-400">
-                                        -
-                                    </Table.Td>
-                                    <Table.Td className="w-32 font-medium text-right border-b dark:border-darkmode-400">
-                                        -
-                                    </Table.Td>
-                                </Table.Tr>)
+                                    <Table.Tr>
+                                        <Table.Td className="border-b dark:border-darkmode-400">
+                                            <div className="font-medium whitespace-nowrap">
+                                                {article}
+                                            </div>
+                                        </Table.Td>
+                                        <Table.Td className="w-32 text-right border-b dark:border-darkmode-400">
+                                            -
+                                        </Table.Td>
+                                        <Table.Td className="w-32 text-right border-b dark:border-darkmode-400">
+                                            -
+                                        </Table.Td>
+                                        <Table.Td
+                                            className="w-32 font-medium text-right border-b dark:border-darkmode-400">
+                                            -
+                                        </Table.Td>
+                                    </Table.Tr>)
                                 )}
 
                             </Table.Tbody>
@@ -106,18 +121,8 @@ function Main() {
                 </div>
                 <div className="flex flex-col-reverse px-5 pb-8 sm:px-20 sm:pb-16 sm:flex-row">
                     <div className="mt-8 text-center sm:text-left sm:mt-0">
-                        <div className="text-base text-slate-500">Bank Transfer</div>
-                        <div className="mt-1 text-lg font-medium text-primary">
-                            Tunisair
-                        </div>
 
-                    </div>
-                    <div className="text-center sm:text-right sm:ml-auto">
-                        <div className="text-base text-slate-500">Total Amount</div>
-                        <div className="mt-2 text-xl font-medium text-primary">
-                            {contrat.prix_menu} tnd
-                        </div>
-                        <div className="mt-1">Taxes included</div>
+                        <QRCode value={value} size={size}/>
                     </div>
                 </div>
             </div>

@@ -136,6 +136,7 @@ async function getContratByRetard(req,res){
     }
     res.json(contrat);
 }
+
 module.exports = {
     createContrat,
     getAllContrat,

@@ -115,6 +115,25 @@ const consumeBon = async (req, res) => {
     }
 }
 
+const getBonDetail = async (req, res)=>{
+    const id = req.params.id;
+    const bon = await Bon.findById(id).populate({
+        path: "retard",
+        populate: {
+            path: "contrat",
+            populate:{
+                path:"articles",
+                populate: {
+                    path: "Article",
+                }
+            }
+        },
+    }).exec();
+    res.json(bon);
+
+
+}
+
 module.exports = {
     getbonByRetard,
     createBon,
@@ -123,4 +142,5 @@ module.exports = {
     updateBonById,
     deleteBonById,
     consumeBon,
+    getBonDetail,
 }
