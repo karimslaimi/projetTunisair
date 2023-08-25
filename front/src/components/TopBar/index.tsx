@@ -33,7 +33,7 @@ function Main(props: { layout?: "side-menu" | "simple-menu" | "top-menu" }) {
             ])}
           >
             <img
-                alt="Enigma Tailwind HTML Admin Template"
+                alt="Tunisair"
                 className="w-18"
                 src={logoUrl}
             />

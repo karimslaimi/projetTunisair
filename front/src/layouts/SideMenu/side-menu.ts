@@ -42,6 +42,7 @@ const nestedMenu = (menu: Array<Menu | "divider">, location: Location) => {
         pathname: item.pathname,
         subMenu: item.subMenu,
         ignore: item.ignore,
+        role: item.role,
       };
       menuItem.active =
         ((location.forceActiveMenu !== undefined &&

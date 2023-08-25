@@ -29,8 +29,6 @@ class userController{
     static async updateUser(req,res){
         const {id} = req.params;
         const {password} = req.body;
-        console.log(id);
-        console.log(password);
         if (password){
             try{
                 const userToUpdate = await User.findById(id);
@@ -59,7 +57,6 @@ class userController{
 
     static async deleteUser(req,res){
         const {id} = req.params;
-        console.log(id);
         try{
 
             await User.deleteOne({ _id: id });

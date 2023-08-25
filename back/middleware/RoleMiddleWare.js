@@ -11,7 +11,7 @@ const User = require("../models/User.model");
       }
 
       // Check if the user has the required role
-      if (user.role === role) {
+      if (role.includes(user.role)) {
         return next(); // User has the required role, proceed to the next middleware/route handler
       } else {
         return res.status(403).json({ message: "Forbidden - Insufficient role" });

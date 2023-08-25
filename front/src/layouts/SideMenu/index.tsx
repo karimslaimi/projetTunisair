@@ -11,6 +11,7 @@ import MobileMenu from "../../components/MobileMenu";
 import DarkModeSwitcher from "../../components/DarkModeSwitcher";
 import MainColorSwitcher from "../../components/MainColorSwitcher";
 import SideMenuTooltip from "../../components/SideMenuTooltip";
+import {authenticated} from "../../stores/authSlice";
 
 function Main() {
   const location = useLocation();
@@ -19,18 +20,18 @@ function Main() {
   >([]);
   const sideMenuStore = useAppSelector(selectSideMenu);
   const sideMenu = () => nestedMenu(sideMenuStore, location);
-
+  const user = useAppSelector(authenticated);
   useEffect(() => {
     setFormattedMenu(sideMenu());
   }, [sideMenuStore, location.pathname]);
-
+debugger;
   return (
     <div className="py-5 md:py-0">
       <MobileMenu />
       <TopBar layout="side-menu" />
       <div className="flex overflow-hidden">
         {/* BEGIN: Side Menu */}
-        <nav className="w-[105px] xl:w-[260px] px-5 pb-16 overflow-x-hidden z-50 pt-32 -mt-4 hidden md:block">
+        <nav className="w-[105px] xl:w-[260px] px-5 pb-16 overflow-x-hidden pt-32 -mt-4 hidden md:block" style={{zIndex: 100 }}>
           <ul>
             {/* BEGIN: First Child */}
             {formattedMenu.map((menu, menuKey) =>
@@ -47,8 +48,8 @@ function Main() {
                   ])}
                   key={menuKey}
                 ></Divider>
-              ) : (
-                <li key={menuKey}>
+              ) :(!menu.role || menu.role?.includes(user.roles.replace("ROLE_", "")))?(
+                <li key={menu.id}>
                   <Menu
                     className={clsx({
                       // Animation
@@ -139,7 +140,7 @@ function Main() {
                   )}
                   {/* END: Second Child */}
                 </li>
-              )
+              ):(<></>)
             )}
             {/* END: First Child */}
           </ul>
