@@ -8,11 +8,13 @@ import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
 import {DateTime} from 'luxon';
 import RetardModal from "../RetardModal";
+import {useAppSelector} from "../../../stores/hooks";
+import {authenticated} from "../../../stores/authSlice";
 
 function Main() {
     let navigate = useNavigate();
     let vols: any[] = [];
-
+    const user = useAppSelector(authenticated);
     let [isOpen, setIsOpen] = useState(false);
     let [isClosed, setIsClosed] = useState(true);
     let [voldId, setVolId] = useState('');
@@ -128,11 +130,17 @@ function Main() {
                         print: false,
                         download: false,
                         formatter(cell) {
-                            const a =
+                            const a = ("ADMIN,CHEFESCALE".includes(user.roles?.replace("ROLE_", "")))?
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
                                                       <a class="flex items-center text-pending mr-3" href="javascript:;">
                                                         <i data-lucide="alarm-minus" class="w-4 h-4 mr-1"></i> Delay
                                                       </a> 
+                                                      <a class="passengers flex items-center  mr-3" href="javascript:;">
+                                                        <i data-lucide="user" class="w-4 h-4 mr-1"></i> Passengers
+                                                      </a>
+                                                     
+                                </div>`):stringToHTML(`<div class="flex lg:justify-center items-center">
+                                                     
                                                       <a class="passengers flex items-center  mr-3" href="javascript:;">
                                                         <i data-lucide="user" class="w-4 h-4 mr-1"></i> Passengers
                                                       </a>
@@ -161,6 +169,7 @@ function Main() {
 
                                 // On click actions
                             });
+
                             return a;
                         },
                     },
@@ -223,9 +232,7 @@ function Main() {
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
                 <h2 className="mr-auto text-lg font-medium">Flights</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
-                    <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
-                        Add New Flight
-                    </Button>
+
 
                 </div>
             </div>

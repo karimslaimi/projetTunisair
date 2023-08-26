@@ -9,7 +9,7 @@ const RetardRoutes = require("./routes/Retard.routes");
 const ContratRoutes = require("./routes/Contrats.routes");
 const fournisseurRoutes = require("./routes/fournisseur.routes");
 const bonRoutes = require('./routes/Bon.routes');
-
+const dashBoardRoutes = require("./routes/Dashboard.routes");
 const cors = require('cors');
 
 mongoose
@@ -34,6 +34,7 @@ app.use('/retard', RetardRoutes);
 app.use('/contrat', ContratRoutes);
 app.use("/supplier", fournisseurRoutes);
 app.use('/bon', bonRoutes);
+app.use('/dashboard', dashBoardRoutes)
 
 // Start the server
 const PORT = process.env.PORT || 3000;

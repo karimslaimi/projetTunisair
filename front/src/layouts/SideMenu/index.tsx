@@ -24,7 +24,6 @@ function Main() {
   useEffect(() => {
     setFormattedMenu(sideMenu());
   }, [sideMenuStore, location.pathname]);
-debugger;
   return (
     <div className="py-5 md:py-0">
       <MobileMenu />
@@ -49,7 +48,7 @@ debugger;
                   key={menuKey}
                 ></Divider>
               ) :(!menu.role || menu.role?.includes(user.roles.replace("ROLE_", "")))?(
-                <li key={menu.id}>
+                <li key={menuKey+"1"}>
                   <Menu
                     className={clsx({
                       // Animation
@@ -78,7 +77,7 @@ debugger;
                         ])}
                       >
                         {menu.subMenu.map((subMenu, subMenuKey) => (
-                          <li key={subMenuKey}>
+                          <li key={subMenuKey+"2"}>
                             <Menu
                               className={clsx({
                                 // Animation
@@ -111,7 +110,7 @@ debugger;
                                 >
                                   {subMenu.subMenu.map(
                                     (lastSubMenu, lastSubMenuKey) => (
-                                      <li key={lastSubMenuKey}>
+                                      <li key={lastSubMenuKey+"3"}>
                                         <Menu
                                           className={clsx({
                                             // Animation

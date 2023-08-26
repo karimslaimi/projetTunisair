@@ -39,7 +39,7 @@ function Router() {
             element: isLoggedIn ? <SideMenu/> : <Navigate to="/login"/>,
             children: [
                 {
-                    path: "/",
+                    path: "/admin",
                     element: <Dashboard/>,
                 },
                 //region user

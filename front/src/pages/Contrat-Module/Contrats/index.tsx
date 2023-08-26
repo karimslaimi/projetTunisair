@@ -7,12 +7,14 @@ import {createIcons, icons} from "lucide";
 import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
 import {DateTime} from "luxon";
+import {useAppSelector} from "../../../stores/hooks";
+import {authenticated} from "../../../stores/authSlice";
 
 
 function Main() {
     let navigate = useNavigate();
     let contrats: any[] = [];
-
+    const user = useAppSelector(authenticated);
 
     const refreshTab = async () => {
         contratService.contratList().then((x: any) => {
@@ -147,7 +149,7 @@ function Main() {
                         print: false,
                         download: false,
                         formatter(cell) {
-                            const a =
+                            const a = ("ADMIN".includes(user.roles?.replace("ROLE_", "")))?
                                 stringToHTML(`<div class="flex lg:justify-center items-center">
                                                       <a class="edit flex items-center mr-3" href="javascript:;">
                                                         <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Edit
@@ -155,6 +157,11 @@ function Main() {
                                                       <a class="flex items-center text-danger" href="javascript:;">
                                                         <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Delete
                                                       </a>
+                                                      <a class="invoice flex items-center" href="javascript:;">
+                                                        <i data-lucide="file" class="w-4 h-4 mr-1"></i> Invoice
+                                                      </a>
+                                </div>`):stringToHTML(`<div class="flex lg:justify-center items-center">
+                                                     
                                                       <a class="invoice flex items-center" href="javascript:;">
                                                         <i data-lucide="file" class="w-4 h-4 mr-1"></i> Invoice
                                                       </a>
@@ -248,9 +255,10 @@ function Main() {
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
                 <h2 className="mr-auto text-lg font-medium">Contrats</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
+                    {("ADMIN".includes(user.roles?.replace("ROLE_", ""))) &&
                     <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
                         Add New Contract
-                    </Button>
+                    </Button>}
 
                 </div>
             </div>

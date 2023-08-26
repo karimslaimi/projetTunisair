@@ -5,7 +5,8 @@ const RetardSchema = new Schema({
     duree_retard: { type: Number, required: true },
     vol: { type: Schema.Types.ObjectId, ref: 'Vol' },
     contrat: { type: Schema.Types.ObjectId, ref: 'Contrat' },
-    bons: [{ type: Schema.Types.ObjectId, ref: 'Bon' }]
+    bons: [{ type: Schema.Types.ObjectId, ref: 'Bon' }],
+    created_at : {type: Date, default: Date.now },
 });
 
 

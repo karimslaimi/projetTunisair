@@ -1,4 +1,3 @@
-// routes/articleRoutes.js
 const express = require('express');
 const router = express.Router();
 const retardController = require('../controllers/retard.controller');

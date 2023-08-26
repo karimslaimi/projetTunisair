@@ -8,11 +8,15 @@ import Button from "../../../base-components/Button";
 import {FormInput, FormSelect} from "../../../base-components/Form";
 import {DateTime} from "luxon";
 import VoucherQrcode from "../VoucherQrcode";
+import {useAppSelector} from "../../../stores/hooks";
+import {authenticated} from "../../../stores/authSlice";
 
 
 function Main() {
     let navigate = useNavigate();
     const {id} = useParams();
+
+    const user = useAppSelector(authenticated);
     let vouchers: any[] = [];
     let [isOpen, setIsOpen] = useState(false);
     let [isClosed, setIsClosed] = useState(true);
@@ -274,15 +278,19 @@ function Main() {
         navigate("add");
     }
 
+    debugger;
 
     return (
         <>
             <div className="flex flex-col items-center mt-8 intro-y sm:flex-row">
                 <h2 className="mr-auto text-lg font-medium">Vouchers</h2>
                 <div className="flex w-full mt-4 sm:w-auto sm:mt-0">
-                    <Button variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
-                        Add Voucher
-                    </Button>
+                    {("ADMIN,CHEFESCALE".includes(user.roles?.replace("ROLE_", ""))) &&
+                        <Button  variant="primary" className="mr-2 shadow-md" onClick={handleAddClick}>
+                            Add Voucher
+                        </Button>
+                    }
+
 
                 </div>
             </div>
