@@ -58,6 +58,7 @@ const initialState: SideMenuState = {
             icon: "Plane",
             pathname: "/vols",
             title: "Vols",
+            role: "ADMIN,CHEFESCALE",
 
         },
         {
@@ -65,7 +66,7 @@ const initialState: SideMenuState = {
             icon: "AlarmMinus",
             pathname: "/retards",
             title: "Delays",
-            role: "ADMIN,FINANCIER,CHEFESCALE,AGENT"
+            role: "ADMIN,CHEFESCALE,AGENT"
         }
     ],
 };

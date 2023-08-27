@@ -147,6 +147,9 @@ function Main() {
                         vertAlign: "middle",
                         print: false,
                         download: false,
+                        formatter: cell => {
+                        return cell.getValue()+" tnd";
+                        }
                     },
                     {
                         title: "Date",
