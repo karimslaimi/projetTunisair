@@ -28,7 +28,11 @@ function Main() {
             if (result) {
                 dispatch(login(result));
                 setLoading(false);
-                navigate('/');
+                if (result.roles.includes("ADMIN")) {
+                    navigate("/admin");
+                } else {
+                    navigate('/');
+                }
             } else {
                 setLoading(false);
                 alert(result.data.message);

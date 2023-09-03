@@ -67,6 +67,13 @@ const initialState: SideMenuState = {
             pathname: "/retards",
             title: "Delays",
             role: "ADMIN,CHEFESCALE,AGENT"
+        },
+        {
+            id: 7,
+            icon: "FileBadge",
+            pathname: "/invoices",
+            title: "Invoices",
+            role: "FINANCIER"
         }
     ],
 };

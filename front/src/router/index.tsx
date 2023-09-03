@@ -24,6 +24,13 @@ import VerifyVoucher from "../pages/Voucher-Module/VerifyVoucher";
 import Invoice from "../pages/Contrat-Module/Invoice";
 import Passengers from "../pages/Vol-Module/Passengers";
 import VoucherDetail from "../pages/Voucher-Module/VoucherDetail";
+import Factures from "../pages/Facture-Module/Factures";
+import AddFacture from "../pages/Facture-Module/Add-Facture";
+import EditFacture from "../pages/Facture-Module/Edit-Facture";
+import Details from "../pages/Details-Module/Details";
+import AddDetail from "../pages/Details-Module/Add-Detail";
+import EditDetail from "../pages/Details-Module/Edit-Detail";
+import InvoiceFacture from "../pages/Facture-Module/InvoiceFacture";
 
 
 function Router() {
@@ -127,7 +134,37 @@ function Router() {
                     path: "/voucher/:idDelay/edit/:id",
                     element: <EditVoucher/>
                 },
+                //endregion
 
+                //region facture
+                {
+                    path: "/invoices",
+                    element: <Factures/>
+                },
+                {
+                    path: "/invoices/add",
+                    element: <AddFacture/>
+                },
+                {
+                    path: "/invoices/edit/:id",
+                    element: <EditFacture/>
+                },
+
+                //endregion
+
+                //region details
+                {
+                    path: "/invoices/details/:id",
+                    element: <Details/>
+                },
+                {
+                    path: "/invoices/details/:id/add",
+                    element: <AddDetail/>
+                },
+                {
+                    path: "/invoices/details/edit/:id",
+                    element: <EditDetail/>
+                },
 
                 //endregion
 
@@ -145,6 +182,11 @@ function Router() {
             path: "/contract/invoice/:id",
             element: <Invoice/>
         },
+        {
+            path: "/invoices/detail/:id",
+            element: <InvoiceFacture/>
+        },
+
 
     ];
 
